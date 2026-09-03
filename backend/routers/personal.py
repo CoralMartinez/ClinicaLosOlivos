@@ -5,6 +5,8 @@ from database import SessionLocal
 from models import Personal
 from schemas import PersonalCreate, PersonalResponse
 
+from auth import get_current_user, verificar_rol
+
 
 router = APIRouter(
     prefix="/personal",
@@ -12,7 +14,10 @@ router = APIRouter(
 )
 
 
+# ==========================================
 # CONEXIÓN A LA BD
+# ==========================================
+
 def get_db():
     db = SessionLocal()
 
@@ -22,22 +27,32 @@ def get_db():
         db.close()
 
 
+# ==========================================
 # CONSULTAR TODOS
+# ADMIN, DOCTOR Y ENFERMERO
+# ==========================================
 
 @router.get("/", response_model=list[PersonalResponse])
-def obtener_personal(db: Session = Depends(get_db)):
+def obtener_personal(
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(get_current_user)
+):
 
     personal = db.query(Personal).all()
 
     return personal
 
 
+# ==========================================
 # CONSULTAR POR ID
+# ADMIN, DOCTOR Y ENFERMERO
+# ==========================================
 
 @router.get("/{personal_id}", response_model=PersonalResponse)
 def obtener_personal_por_id(
     personal_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(get_current_user)
 ):
 
     personal = db.query(Personal).filter(
@@ -53,11 +68,16 @@ def obtener_personal_por_id(
     return personal
 
 
-# CREAR/REGISTRAR
+# ==========================================
+# REGISTRAR
+# SOLO ADMIN
+# ==========================================
+
 @router.post("/", response_model=PersonalResponse)
 def crear_personal(
     datos: PersonalCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin"]))
 ):
 
     nuevo_personal = Personal(
@@ -76,13 +96,18 @@ def crear_personal(
 
     return nuevo_personal
 
-# MODIFICAR/ACTUALIZAR 
+
+# ==========================================
+# MODIFICAR
+# SOLO ADMIN
+# ==========================================
 
 @router.put("/{personal_id}", response_model=PersonalResponse)
 def modificar_personal(
     personal_id: int,
     datos: PersonalCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin"]))
 ):
 
     personal = db.query(Personal).filter(
@@ -109,12 +134,16 @@ def modificar_personal(
     return personal
 
 
+# ==========================================
 # ELIMINAR
+# SOLO ADMIN
+# ==========================================
 
 @router.delete("/{personal_id}")
 def eliminar_personal(
     personal_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin"]))
 ):
 
     personal = db.query(Personal).filter(

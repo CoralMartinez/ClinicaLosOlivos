@@ -49,3 +49,47 @@ class PacienteResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        
+# ASIGNACIONES
+
+class AsignacionCreate(BaseModel):
+    paciente_id: int
+    personal_id: int
+    fecha_asignacion: date
+    observaciones: str | None = None
+
+
+class AsignacionResponse(BaseModel):
+    id: int
+    paciente_id: int
+    personal_id: int
+    fecha_asignacion: date
+    observaciones: str | None = None
+
+    class Config:
+        from_attributes = True
+        
+        
+# USUARIOS
+
+class UsuarioCreate(BaseModel):
+    usuario: str
+    password: str
+    rol: str
+    personal_id: int | None = None
+
+
+class UsuarioResponse(BaseModel):
+    id: int
+    usuario: str
+    rol: str
+    personal_id: int | None = None
+
+    class Config:
+        from_attributes = True
+        
+# LOGIN
+
+class LoginRequest(BaseModel):
+    usuario: str
+    password: str

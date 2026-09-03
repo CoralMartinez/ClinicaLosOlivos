@@ -5,6 +5,8 @@ from database import SessionLocal
 from models import Paciente
 from schemas import PacienteCreate, PacienteResponse
 
+from auth import get_current_user, verificar_rol
+
 
 router = APIRouter(
     prefix="/pacientes",
@@ -12,7 +14,10 @@ router = APIRouter(
 )
 
 
-# CONEXIÓN A LA BD
+# ==========================================
+# CONEXIÓN A LA BASE DE DATOS
+# ==========================================
+
 def get_db():
     db = SessionLocal()
 
@@ -22,10 +27,15 @@ def get_db():
         db.close()
 
 
-# CONSULTAR TODOS 
+# ==========================================
+# CONSULTAR TODOS LOS PACIENTES
+# ADMIN, DOCTOR Y ENFERMERO
+# ==========================================
+
 @router.get("/", response_model=list[PacienteResponse])
 def obtener_pacientes(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(get_current_user)
 ):
 
     pacientes = db.query(Paciente).all()
@@ -33,11 +43,16 @@ def obtener_pacientes(
     return pacientes
 
 
-# CONSULTAR POR ID
+# ==========================================
+# CONSULTAR PACIENTE POR ID
+# ADMIN, DOCTOR Y ENFERMERO
+# ==========================================
+
 @router.get("/{paciente_id}", response_model=PacienteResponse)
 def obtener_paciente_por_id(
     paciente_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(get_current_user)
 ):
 
     paciente = db.query(Paciente).filter(
@@ -53,11 +68,16 @@ def obtener_paciente_por_id(
     return paciente
 
 
-# REGISTRAR/CREAR
+# ==========================================
+# REGISTRAR PACIENTE
+# ADMIN Y DOCTOR
+# ==========================================
+
 @router.post("/", response_model=PacienteResponse)
 def crear_paciente(
     datos: PacienteCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin", "Doctor"]))
 ):
 
     nuevo_paciente = Paciente(
@@ -77,13 +97,17 @@ def crear_paciente(
     return nuevo_paciente
 
 
-# MODIFICAR 
+# ==========================================
+# MODIFICAR PACIENTE
+# ADMIN Y DOCTOR
+# ==========================================
 
 @router.put("/{paciente_id}", response_model=PacienteResponse)
 def modificar_paciente(
     paciente_id: int,
     datos: PacienteCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin", "Doctor"]))
 ):
 
     paciente = db.query(Paciente).filter(
@@ -110,11 +134,16 @@ def modificar_paciente(
     return paciente
 
 
-# ELIMINAR 
+# ==========================================
+# ELIMINAR PACIENTE
+# SOLO ADMIN
+# ==========================================
+
 @router.delete("/{paciente_id}")
 def eliminar_paciente(
     paciente_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    usuario_actual=Depends(verificar_rol(["Admin"]))
 ):
 
     paciente = db.query(Paciente).filter(

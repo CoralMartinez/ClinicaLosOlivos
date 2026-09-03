@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Panel de Enfermería</title>
+
+</head>
+
+<body>
+
+    <h1>Clínica Los Olivos</h1>
+
+    <h2>Panel de Enfermería</h2>
+
+    <p id="bienvenida"></p>
+
+    <hr>
+
+    <!-- ==========================================
+         MENÚ
+    =========================================== -->
+
+    <button onclick="verPacientes()">
+        Ver pacientes
+    </button>
+
+    <button onclick="verAsignaciones()">
+        Ver asignaciones
+    </button>
+
+    <button onclick="mostrarFormularioAsignacion()">
+        Crear asignación
+    </button>
+
+    <button onclick="cerrarSesion()">
+        Cerrar sesión
+    </button>
+
+    <hr>
+
+    <!-- ==========================================
+         CONTENIDO
+    =========================================== -->
+
+    <div id="contenido">
+
+        <p>
+            Selecciona una opción para comenzar.
+        </p>
+
+    </div>
+
+
+<script>
+
+// ==========================================
+// CONFIGURACIÓN DE LA API
+// ==========================================
+
+const API = "http://127.0.0.1:8000";
+
+
+// ==========================================
+// OBTENER TOKEN
+// ==========================================
+
+function obtenerToken() {
+
+    return localStorage.getItem("access_token");
+
+}
+
+
+// ==========================================
+// ENCABEZADOS
+// ==========================================
+
+function encabezados() {
+
+    return {
+
+        "Content-Type": "application/json",
+
+        "Authorization":
+            "Bearer " + obtenerToken()
+
+    };
+
+}
+
+
+// ==========================================
+// COMPROBAR SESIÓN
+// ==========================================
+
+const rol = localStorage.getItem("rol");
+
+const usuario = localStorage.getItem("usuario");
+
+
+if (
+    !obtenerToken() ||
+    rol !== "Enfermero"
+) {
+
+    alert(
+        "No tienes permisos para acceder al panel de enfermería."
+    );
+
+    window.location.href = "/";
+
+}
+
+
+document.getElementById(
+    "bienvenida"
+).textContent =
+    "Bienvenido, " + usuario + ".";
+
+
+// ==========================================
+// VER PACIENTES
+// ==========================================
+
+async function verPacientes() {
+
+    try {
+
+        const respuesta = await fetch(
+            API + "/pacientes/",
+            {
+                headers: encabezados()
+            }
+        );
+
+
+        const pacientes =
+            await respuesta.json();
+
+
+        if (!respuesta.ok) {
+
+            alert(
+                pacientes.detail ||
+                "No se pudieron consultar los pacientes."
+            );
+
+            return;
+
+        }
+
+
+        let html =
+            "<h3>Pacientes registrados</h3>";
+
+
+        // ==================================
+        // SI NO HAY PACIENTES
+        // ==================================
+
+        if (pacientes.length === 0) {
+
+            html += `
+
+                <p>
+                    No hay pacientes registrados.
+                </p>
+
+            `;
+
+        }
+
+
+        // ==================================
+        // SI HAY PACIENTES
+        // ==================================
+
+        else {
+
+            html += `
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nombre</th>
+
+                        <th>Fecha de nacimiento</th>
+
+                        <th>Teléfono</th>
+
+                        <th>Diagnóstico</th>
+
+                        <th>Estatus</th>
+
+                    </tr>
+
+            `;
+
+
+            pacientes.forEach(
+                paciente => {
+
+                    html += `
+
+                        <tr>
+
+                            <td>
+                                ${paciente.id}
+                            </td>
+
+                            <td>
+
+                                ${paciente.nombre}
+
+                                ${paciente.apellido_paterno}
+
+                                ${paciente.apellido_materno || ""}
+
+                            </td>
+
+                            <td>
+
+                                ${paciente.fecha_nacimiento ||
+                                "No registrada"}
+
+                            </td>
+
+                            <td>
+
+                                ${paciente.telefono ||
+                                "No registrado"}
+
+                            </td>
+
+                            <td>
+
+                                ${paciente.diagnostico ||
+                                "No registrado"}
+
+                            </td>
+
+                            <td>
+
+                                ${paciente.estatus}
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            html += "</table>";
+
+        }
+
+
+        document.getElementById(
+            "contenido"
+        ).innerHTML = html;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo conectar con el servidor."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// VER ASIGNACIONES
+// ==========================================
+
+async function verAsignaciones() {
+
+    try {
+
+        const respuesta = await fetch(
+            API + "/asignaciones/",
+            {
+                headers: encabezados()
+            }
+        );
+
+
+        const asignaciones =
+            await respuesta.json();
+
+
+        if (!respuesta.ok) {
+
+            alert(
+                asignaciones.detail ||
+                "No se pudieron consultar las asignaciones."
+            );
+
+            return;
+
+        }
+
+
+        let html =
+            "<h3>Asignaciones registradas</h3>";
+
+
+        // ==================================
+        // SI NO HAY ASIGNACIONES
+        // ==================================
+
+        if (asignaciones.length === 0) {
+
+            html += `
+
+                <p>
+                    No hay asignaciones registradas.
+                </p>
+
+            `;
+
+        }
+
+
+        // ==================================
+        // SI HAY ASIGNACIONES
+        // ==================================
+
+        else {
+
+            html += `
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Paciente</th>
+
+                        <th>Personal</th>
+
+                        <th>Fecha de asignación</th>
+
+                        <th>Observaciones</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+            `;
+
+
+            asignaciones.forEach(
+                asignacion => {
+
+                    html += `
+
+                        <tr>
+
+                            <td>
+                                ${asignacion.id}
+                            </td>
+
+                            <td>
+                                ${asignacion.paciente_id}
+                            </td>
+
+                            <td>
+                                ${asignacion.personal_id}
+                            </td>
+
+                            <td>
+                                ${asignacion.fecha_asignacion}
+                            </td>
+
+                            <td>
+
+                                ${asignacion.observaciones ||
+                                "Sin observaciones"}
+
+                            </td>
+
+                            <td>
+
+                                <button
+                                    onclick="verDetalleAsignacion(${asignacion.id})">
+
+                                    Detalles
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            html += "</table>";
+
+        }
+
+
+        document.getElementById(
+            "contenido"
+        ).innerHTML = html;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo conectar con el servidor."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// DETALLES DE ASIGNACIÓN
+// ==========================================
+
+async function verDetalleAsignacion(id) {
+
+    try {
+
+        // ==================================
+        // OBTENER ASIGNACIÓN
+        // ==================================
+
+        const respuestaAsignacion =
+            await fetch(
+                API + "/asignaciones/" + id,
+                {
+                    headers: encabezados()
+                }
+            );
+
+
+        const asignacion =
+            await respuestaAsignacion.json();
+
+
+        if (!respuestaAsignacion.ok) {
+
+            alert(
+                asignacion.detail ||
+                "No se pudo consultar la asignación."
+            );
+
+            return;
+
+        }
+
+
+        // ==================================
+        // OBTENER PACIENTE
+        // ==================================
+
+        const respuestaPaciente =
+            await fetch(
+                API + "/pacientes/" +
+                asignacion.paciente_id,
+                {
+                    headers: encabezados()
+                }
+            );
+
+
+        const paciente =
+            await respuestaPaciente.json();
+
+
+        if (!respuestaPaciente.ok) {
+
+            alert(
+                paciente.detail ||
+                "No se pudo consultar el paciente."
+            );
+
+            return;
+
+        }
+
+
+        // ==================================
+        // OBTENER PERSONAL
+        // ==================================
+
+        const respuestaPersonal =
+            await fetch(
+                API + "/personal/" +
+                asignacion.personal_id,
+                {
+                    headers: encabezados()
+                }
+            );
+
+
+        const personal =
+            await respuestaPersonal.json();
+
+
+        if (!respuestaPersonal.ok) {
+
+            alert(
+                personal.detail ||
+                "No se pudo consultar el personal."
+            );
+
+            return;
+
+        }
+
+
+        // ==================================
+        // MOSTRAR DETALLES
+        // ==================================
+
+        document.getElementById(
+            "contenido"
+        ).innerHTML = `
+
+            <h3>Detalles de la asignación</h3>
+
+            <hr>
+
+
+            <h4>Asignación</h4>
+
+            <p>
+
+                <strong>ID:</strong>
+
+                ${asignacion.id}
+
+            </p>
+
+
+            <p>
+
+                <strong>Fecha de asignación:</strong>
+
+                ${asignacion.fecha_asignacion}
+
+            </p>
+
+
+            <p>
+
+                <strong>Observaciones:</strong>
+
+                ${asignacion.observaciones ||
+                "Sin observaciones"}
+
+            </p>
+
+
+            <h4>Paciente</h4>
+
+
+            <p>
+
+                <strong>Nombre:</strong>
+
+                ${paciente.nombre}
+
+                ${paciente.apellido_paterno}
+
+                ${paciente.apellido_materno || ""}
+
+            </p>
+
+
+            <p>
+
+                <strong>Fecha de nacimiento:</strong>
+
+                ${paciente.fecha_nacimiento ||
+                "No registrada"}
+
+            </p>
+
+
+            <p>
+
+                <strong>Teléfono:</strong>
+
+                ${paciente.telefono ||
+                "No registrado"}
+
+            </p>
+
+
+            <p>
+
+                <strong>Diagnóstico:</strong>
+
+                ${paciente.diagnostico ||
+                "No registrado"}
+
+            </p>
+
+
+            <p>
+
+                <strong>Estatus:</strong>
+
+                ${paciente.estatus}
+
+            </p>
+
+
+            <h4>Personal asignado</h4>
+
+
+            <p>
+
+                <strong>Nombre:</strong>
+
+                ${personal.nombre}
+
+                ${personal.apellido_paterno}
+
+                ${personal.apellido_materno || ""}
+
+            </p>
+
+
+            <p>
+
+                <strong>Tipo:</strong>
+
+                ${personal.tipo}
+
+            </p>
+
+
+            <p>
+
+                <strong>Especialidad:</strong>
+
+                ${personal.especialidad ||
+                "No especificada"}
+
+            </p>
+
+
+            <br>
+
+
+            <button onclick="verAsignaciones()">
+
+                Regresar a asignaciones
+
+            </button>
+
+        `;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo obtener el detalle de la asignación."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// FORMULARIO CREAR ASIGNACIÓN
+// ==========================================
+
+function mostrarFormularioAsignacion() {
+
+    document.getElementById(
+        "contenido"
+    ).innerHTML = `
+
+        <h3>Crear asignación</h3>
+
+
+        <label>
+
+            ID del paciente:
+
+        </label>
+
+        <br>
+
+
+        <input
+
+            type="number"
+
+            id="pacienteId"
+
+            min="1"
+
+            required
+
+        >
+
+
+        <br><br>
+
+
+        <label>
+
+            ID del personal:
+
+        </label>
+
+        <br>
+
+
+        <input
+
+            type="number"
+
+            id="personalId"
+
+            min="1"
+
+            required
+
+        >
+
+
+        <br><br>
+
+
+        <label>
+
+            Fecha de asignación:
+
+        </label>
+
+        <br>
+
+
+        <input
+
+            type="date"
+
+            id="fechaAsignacion"
+
+            required
+
+        >
+
+
+        <br><br>
+
+
+        <label>
+
+            Observaciones:
+
+        </label>
+
+        <br>
+
+
+        <textarea
+
+            id="observaciones"
+
+            rows="4"
+
+            cols="40"
+
+        ></textarea>
+
+
+        <br><br>
+
+
+        <button onclick="guardarAsignacion()">
+
+            Guardar asignación
+
+        </button>
+
+
+        <button onclick="verAsignaciones()">
+
+            Cancelar
+
+        </button>
+
+    `;
+
+}
+
+
+// ==========================================
+// GUARDAR ASIGNACIÓN
+// ==========================================
+
+async function guardarAsignacion() {
+
+    const paciente_id =
+        document.getElementById(
+            "pacienteId"
+        ).value;
+
+
+    const personal_id =
+        document.getElementById(
+            "personalId"
+        ).value;
+
+
+    const fecha_asignacion =
+        document.getElementById(
+            "fechaAsignacion"
+        ).value;
+
+
+    const observaciones =
+        document.getElementById(
+            "observaciones"
+        ).value;
+
+
+    // ==================================
+    // VALIDAR CAMPOS
+    // ==================================
+
+    if (
+        !paciente_id ||
+        !personal_id ||
+        !fecha_asignacion
+    ) {
+
+        alert(
+            "Completa todos los campos obligatorios."
+        );
+
+        return;
+
+    }
+
+
+    // ==================================
+    // VALIDAR IDS
+    // ==================================
+
+    if (
+        Number(paciente_id) <= 0 ||
+        Number(personal_id) <= 0
+    ) {
+
+        alert(
+            "Los IDs deben ser mayores que cero."
+        );
+
+        return;
+
+    }
+
+
+    const datos = {
+
+        paciente_id:
+            Number(paciente_id),
+
+        personal_id:
+            Number(personal_id),
+
+        fecha_asignacion:
+            fecha_asignacion,
+
+        observaciones:
+            observaciones || null
+
+    };
+
+
+    try {
+
+        const respuesta =
+            await fetch(
+                API + "/asignaciones/",
+                {
+
+                    method: "POST",
+
+                    headers:
+                        encabezados(),
+
+                    body:
+                        JSON.stringify(datos)
+
+                }
+            );
+
+
+        const resultado =
+            await respuesta.json();
+
+
+        // ==================================
+        // ERROR
+        // ==================================
+
+        if (!respuesta.ok) {
+
+            alert(
+                resultado.detail ||
+                "No se pudo crear la asignación."
+            );
+
+            return;
+
+        }
+
+
+        // ==================================
+        // ÉXITO
+        // ==================================
+
+        alert(
+            "Asignación creada correctamente."
+        );
+
+
+        verAsignaciones();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo conectar con el servidor."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// CERRAR SESIÓN
+// ==========================================
+
+function cerrarSesion() {
+
+    const confirmar =
+        confirm(
+            "¿Estás seguro de que deseas cerrar sesión?"
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "access_token"
+    );
+
+    localStorage.removeItem(
+        "usuario"
+    );
+
+    localStorage.removeItem(
+        "rol"
+    );
+
+    localStorage.removeItem(
+        "personal_id"
+    );
+
+
+    alert(
+        "Sesión cerrada correctamente."
+    );
+
+
+    window.location.href = "/";
+
+}
+
+
+// ==========================================
+// CARGAR PACIENTES AL ENTRAR
+// ==========================================
+
+verPacientes();
+
+</script>
+
+</body>
+
+</html>
