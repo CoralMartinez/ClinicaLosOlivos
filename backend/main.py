@@ -11,17 +11,26 @@ app = FastAPI(
 )
 
 
+# ==========================================
 # CONFIGURACIÓN CORS
+# ==========================================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5000"],
+    allow_origins=[
+        "http://127.0.0.1:5000",
+        "http://localhost:5000",
+        "http://192.168.0.252:5000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# ==========================================
 # RUTAS
+# ==========================================
 
 app.include_router(personal.router)
 
@@ -32,7 +41,9 @@ app.include_router(asignaciones.router)
 app.include_router(usuarios.router)
 
 
+# ==========================================
 # RUTA PRINCIPAL
+# ==========================================
 
 @app.get("/")
 def inicio():

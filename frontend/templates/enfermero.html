@@ -10,65 +10,304 @@
 
     <title>Panel de Enfermería</title>
 
+    <!-- CSS GENERAL DE CLÍNICA LOS OLIVOS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
+
 
 <body>
 
-    <h1>Clínica Los Olivos</h1>
 
-    <h2>Panel de Enfermería</h2>
+<!-- ==================================================
+     DASHBOARD
+================================================== -->
 
-    <p id="bienvenida"></p>
+<div class="dashboard">
 
-    <hr>
 
-    <!-- ==========================================
-         MENÚ
-    =========================================== -->
+    <!-- ==================================================
+         SIDEBAR
+    ================================================== -->
 
-    <button onclick="verPacientes()">
-        Ver pacientes
-    </button>
+    <aside class="sidebar">
 
-    <button onclick="verAsignaciones()">
-        Ver asignaciones
-    </button>
 
-    <button onclick="mostrarFormularioAsignacion()">
-        Crear asignación
-    </button>
+        <!-- LOGO -->
 
-    <button onclick="cerrarSesion()">
-        Cerrar sesión
-    </button>
+        <div class="sidebar-logo">
 
-    <hr>
+            <div class="logo-container">
 
-    <!-- ==========================================
-         CONTENIDO
-    =========================================== -->
+                <img
+                    src="{{ url_for('static', filename='img/logo.png') }}"
+                    alt="Clínica Los Olivos"
+                    class="logo"
+                >
 
-    <div id="contenido">
+            </div>
 
-        <p>
-            Selecciona una opción para comenzar.
-        </p>
 
-    </div>
+            <h2>
+                Clínica Los Olivos
+            </h2>
+
+
+            <p>
+                Panel de Enfermería
+            </p>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             MENÚ
+        ================================================== -->
+
+        <div class="menu">
+
+
+            <div class="menu-title">
+                Menú principal
+            </div>
+
+
+            <button
+                id="btnPacientes"
+                onclick="verPacientes()">
+
+                &nbsp; Pacientes
+
+            </button>
+
+
+            <button
+                id="btnAsignaciones"
+                onclick="verAsignaciones()">
+
+                &nbsp; Asignaciones
+
+            </button>
+
+
+            <button
+                id="btnCrearAsignacion"
+                onclick="mostrarFormularioAsignacion()">
+
+                 &nbsp; Crear asignación
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             CERRAR SESIÓN
+        ================================================== -->
+
+        <div class="logout">
+
+            <button onclick="cerrarSesion()">
+
+                 &nbsp; Cerrar sesión
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ==================================================
+         CONTENIDO PRINCIPAL
+    ================================================== -->
+
+    <main class="main">
+
+
+        <!-- ==================================================
+             BARRA SUPERIOR
+        ================================================== -->
+
+        <div class="topbar">
+
+
+            <div>
+
+                <h1>
+                    Panel de Enfermería
+                </h1>
+
+                <p>
+                    Gestión y seguimiento de pacientes
+                </p>
+
+            </div>
+
+
+
+            <div class="usuario-info">
+
+                <div class="usuario-icon">
+
+                    EN
+
+                </div>
+
+
+                <div>
+
+                    <strong id="usuarioNombre">
+                        Enfermero
+                    </strong>
+
+                    <span>
+                        Personal de enfermería
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             BIENVENIDA
+        ================================================== -->
+
+        <div class="bienvenida-card">
+
+
+            <h2>
+                Bienvenido
+            </h2>
+
+
+            <p id="bienvenida">
+
+                Cargando información...
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             CONTENIDO
+        ================================================== -->
+
+        <div class="contenido-card"
+             id="contenido">
+
+
+            <h3>
+                Panel de Enfermería
+            </h3>
+
+
+            <p>
+                Selecciona una opción del menú para comenzar.
+            </p>
+
+
+            <div class="inicio-opciones">
+
+
+                <div
+                    class="inicio-opcion"
+                    onclick="verPacientes()">
+
+
+                    <h4>
+                        👥 Pacientes
+                    </h4>
+
+
+                    <p>
+                        Consulta la información de los pacientes registrados.
+                    </p>
+
+
+                </div>
+
+
+
+                <div
+                    class="inicio-opcion"
+                    onclick="verAsignaciones()">
+
+
+                    <h4>
+                        📋 Asignaciones
+                    </h4>
+
+
+                    <p>
+                        Consulta las asignaciones realizadas.
+                    </p>
+
+
+                </div>
+
+
+
+                <div
+                    class="inicio-opcion"
+                    onclick="mostrarFormularioAsignacion()">
+
+
+                    <h4>
+                        ➕ Crear asignación
+                    </h4>
+
+
+                    <p>
+                        Asigna un paciente al personal correspondiente.
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
 
 
 <script>
 
-// ==========================================
-// CONFIGURACIÓN DE LA API
-// ==========================================
 
-const API = "http://127.0.0.1:8000";
+/* ==================================================
+   CONFIGURACIÓN DE LA API
+================================================== */
+
+const API = "http://192.168.0.252:8000";
 
 
-// ==========================================
-// OBTENER TOKEN
-// ==========================================
+
+/* ==================================================
+   OBTENER TOKEN
+================================================== */
 
 function obtenerToken() {
 
@@ -77,9 +316,10 @@ function obtenerToken() {
 }
 
 
-// ==========================================
-// ENCABEZADOS
-// ==========================================
+
+/* ==================================================
+   ENCABEZADOS
+================================================== */
 
 function encabezados() {
 
@@ -95,14 +335,22 @@ function encabezados() {
 }
 
 
-// ==========================================
-// COMPROBAR SESIÓN
-// ==========================================
 
-const rol = localStorage.getItem("rol");
+/* ==================================================
+   DATOS DE SESIÓN
+================================================== */
 
-const usuario = localStorage.getItem("usuario");
+const rol =
+    localStorage.getItem("rol");
 
+const usuario =
+    localStorage.getItem("usuario");
+
+
+
+/* ==================================================
+   COMPROBAR SESIÓN
+================================================== */
 
 if (
     !obtenerToken() ||
@@ -118,26 +366,235 @@ if (
 }
 
 
+
+/* ==================================================
+   MOSTRAR USUARIO
+================================================== */
+
 document.getElementById(
     "bienvenida"
 ).textContent =
     "Bienvenido, " + usuario + ".";
 
 
-// ==========================================
-// VER PACIENTES
-// ==========================================
+document.getElementById(
+    "usuarioNombre"
+).textContent =
+    usuario;
+
+
+
+/* ==================================================
+   FECHAS PERMITIDAS
+================================================== */
+
+/*
+ * La fecha máxima permitida es el día actual.
+ *
+ * La fecha mínima es 130 años antes
+ * de la fecha actual.
+ *
+ * Ejemplo:
+ * 03/09/2026
+ * mínimo: 03/09/1896
+ * máximo: 03/09/2026
+ */
+
+function obtenerFechaActual() {
+
+    const hoy = new Date();
+
+    const año = hoy.getFullYear();
+
+    const mes =
+        String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dia =
+        String(
+            hoy.getDate()
+        ).padStart(2, "0");
+
+    return `${año}-${mes}-${dia}`;
+
+}
+
+
+
+function obtenerFechaMinima() {
+
+    const hoy = new Date();
+
+    const año =
+        hoy.getFullYear() - 130;
+
+    const mes =
+        String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dia =
+        String(
+            hoy.getDate()
+        ).padStart(2, "0");
+
+    return `${año}-${mes}-${dia}`;
+
+}
+
+
+
+/*
+ * Aplica el rango de fechas a un campo.
+ */
+
+function establecerRangoFecha(idCampo) {
+
+    const campo =
+        document.getElementById(idCampo);
+
+    if (!campo) {
+
+        return;
+
+    }
+
+    campo.min =
+        obtenerFechaMinima();
+
+    campo.max =
+        obtenerFechaActual();
+
+}
+
+
+
+/* ==================================================
+   VALIDAR RANGO DE FECHA
+================================================== */
+
+function fechaDentroDelRango(fecha) {
+
+    if (!fecha) {
+
+        return false;
+
+    }
+
+
+    const fechaSeleccionada =
+        new Date(
+            fecha + "T00:00:00"
+        );
+
+
+    const fechaMinima =
+        new Date(
+            obtenerFechaMinima() +
+            "T00:00:00"
+        );
+
+
+    const fechaMaxima =
+        new Date(
+            obtenerFechaActual() +
+            "T00:00:00"
+        );
+
+
+    return (
+        fechaSeleccionada >= fechaMinima &&
+        fechaSeleccionada <= fechaMaxima
+    );
+
+}
+
+
+
+/* ==================================================
+   ACTIVAR BOTÓN DEL MENÚ
+================================================== */
+
+function activarMenu(id) {
+
+    const botones =
+        document.querySelectorAll(".menu button");
+
+
+    botones.forEach(
+        boton => {
+
+            boton.classList.remove("activo");
+
+        }
+    );
+
+
+    const botonActivo =
+        document.getElementById(id);
+
+
+    if (botonActivo) {
+
+        botonActivo.classList.add("activo");
+
+    }
+
+}
+
+
+
+/* ==================================================
+   ESCAPAR HTML
+================================================== */
+
+function escapeHtml(texto) {
+
+    if (texto === null ||
+        texto === undefined) {
+
+        return "";
+
+    }
+
+
+    return String(texto)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+
+/* ==================================================
+   VER PACIENTES
+================================================== */
 
 async function verPacientes() {
 
+
+    activarMenu("btnPacientes");
+
+
     try {
 
-        const respuesta = await fetch(
-            API + "/pacientes/",
-            {
-                headers: encabezados()
-            }
-        );
+
+        const respuesta =
+            await fetch(
+                API + "/pacientes/",
+                {
+                    headers: encabezados()
+                }
+            );
 
 
         const pacientes =
@@ -156,15 +613,27 @@ async function verPacientes() {
         }
 
 
-        let html =
-            "<h3>Pacientes registrados</h3>";
+
+        let html = `
+
+            <h3>
+                Pacientes registrados
+            </h3>
+
+            <p>
+                Consulta de pacientes registrados en la clínica.
+            </p>
+
+        `;
 
 
-        // ==================================
-        // SI NO HAY PACIENTES
-        // ==================================
+
+        /* ==================================================
+           SI NO HAY PACIENTES
+        ================================================== */
 
         if (pacientes.length === 0) {
+
 
             html += `
 
@@ -174,83 +643,114 @@ async function verPacientes() {
 
             `;
 
+
         }
 
 
-        // ==================================
-        // SI HAY PACIENTES
-        // ==================================
+
+        /* ==================================================
+           SI HAY PACIENTES
+        ================================================== */
 
         else {
 
+
             html += `
 
-                <table border="1">
+                <div class="tabla-contenedor">
 
-                    <tr>
+                    <table>
 
-                        <th>ID</th>
+                        <thead>
 
-                        <th>Nombre</th>
+                            <tr>
 
-                        <th>Fecha de nacimiento</th>
+                                <th>ID</th>
 
-                        <th>Teléfono</th>
+                                <th>Nombre</th>
 
-                        <th>Diagnóstico</th>
+                                <th>Fecha de nacimiento</th>
 
-                        <th>Estatus</th>
+                                <th>Teléfono</th>
 
-                    </tr>
+                                <th>Diagnóstico</th>
+
+                                <th>Estatus</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
 
             `;
 
 
+
             pacientes.forEach(
                 paciente => {
+
 
                     html += `
 
                         <tr>
 
                             <td>
-                                ${paciente.id}
+                                ${escapeHtml(paciente.id)}
                             </td>
+
 
                             <td>
 
-                                ${paciente.nombre}
+                                ${escapeHtml(paciente.nombre)}
 
-                                ${paciente.apellido_paterno}
+                                ${escapeHtml(
+                                    paciente.apellido_paterno
+                                )}
 
-                                ${paciente.apellido_materno || ""}
-
-                            </td>
-
-                            <td>
-
-                                ${paciente.fecha_nacimiento ||
-                                "No registrada"}
+                                ${escapeHtml(
+                                    paciente.apellido_materno || ""
+                                )}
 
                             </td>
 
+
                             <td>
 
-                                ${paciente.telefono ||
-                                "No registrado"}
+                                ${escapeHtml(
+                                    paciente.fecha_nacimiento ||
+                                    "No registrada"
+                                )}
 
                             </td>
 
+
                             <td>
 
-                                ${paciente.diagnostico ||
-                                "No registrado"}
+                                ${escapeHtml(
+                                    paciente.telefono ||
+                                    "No registrado"
+                                )}
 
                             </td>
 
+
                             <td>
 
-                                ${paciente.estatus}
+                                ${escapeHtml(
+                                    paciente.diagnostico ||
+                                    "No registrado"
+                                )}
+
+                            </td>
+
+
+                            <td>
+
+                                ${escapeHtml(
+                                    paciente.estatus ||
+                                    "No registrado"
+                                )}
 
                             </td>
 
@@ -262,9 +762,19 @@ async function verPacientes() {
             );
 
 
-            html += "</table>";
+
+            html += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
 
         }
+
 
 
         document.getElementById(
@@ -272,9 +782,12 @@ async function verPacientes() {
         ).innerHTML = html;
 
 
+
     } catch (error) {
 
+
         console.error(error);
+
 
         alert(
             "No se pudo conectar con el servidor."
@@ -285,20 +798,27 @@ async function verPacientes() {
 }
 
 
-// ==========================================
-// VER ASIGNACIONES
-// ==========================================
+
+/* ==================================================
+   VER ASIGNACIONES
+================================================== */
 
 async function verAsignaciones() {
 
+
+    activarMenu("btnAsignaciones");
+
+
     try {
 
-        const respuesta = await fetch(
-            API + "/asignaciones/",
-            {
-                headers: encabezados()
-            }
-        );
+
+        const respuesta =
+            await fetch(
+                API + "/asignaciones/",
+                {
+                    headers: encabezados()
+                }
+            );
 
 
         const asignaciones =
@@ -317,15 +837,27 @@ async function verAsignaciones() {
         }
 
 
-        let html =
-            "<h3>Asignaciones registradas</h3>";
+
+        let html = `
+
+            <h3>
+                Asignaciones registradas
+            </h3>
+
+            <p>
+                Consulta de pacientes asignados al personal de la clínica.
+            </p>
+
+        `;
 
 
-        // ==================================
-        // SI NO HAY ASIGNACIONES
-        // ==================================
+
+        /* ==================================================
+           SI NO HAY ASIGNACIONES
+        ================================================== */
 
         if (asignaciones.length === 0) {
+
 
             html += `
 
@@ -335,76 +867,109 @@ async function verAsignaciones() {
 
             `;
 
+
         }
 
 
-        // ==================================
-        // SI HAY ASIGNACIONES
-        // ==================================
+
+        /* ==================================================
+           SI HAY ASIGNACIONES
+        ================================================== */
 
         else {
 
+
             html += `
 
-                <table border="1">
+                <div class="tabla-contenedor">
 
-                    <tr>
+                    <table>
 
-                        <th>ID</th>
+                        <thead>
 
-                        <th>Paciente</th>
+                            <tr>
 
-                        <th>Personal</th>
+                                <th>ID</th>
 
-                        <th>Fecha de asignación</th>
+                                <th>Paciente</th>
 
-                        <th>Observaciones</th>
+                                <th>Personal</th>
 
-                        <th>Acciones</th>
+                                <th>Fecha de asignación</th>
 
-                    </tr>
+                                <th>Observaciones</th>
+
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
 
             `;
 
 
+
             asignaciones.forEach(
                 asignacion => {
+
 
                     html += `
 
                         <tr>
 
                             <td>
-                                ${asignacion.id}
+                                ${escapeHtml(
+                                    asignacion.id
+                                )}
                             </td>
 
+
                             <td>
-                                ${asignacion.paciente_id}
+                                ${escapeHtml(
+                                    asignacion.paciente_id
+                                )}
                             </td>
 
+
                             <td>
-                                ${asignacion.personal_id}
+                                ${escapeHtml(
+                                    asignacion.personal_id
+                                )}
                             </td>
 
+
                             <td>
-                                ${asignacion.fecha_asignacion}
+                                ${escapeHtml(
+                                    asignacion.fecha_asignacion
+                                )}
                             </td>
 
+
                             <td>
 
-                                ${asignacion.observaciones ||
-                                "Sin observaciones"}
+                                ${escapeHtml(
+                                    asignacion.observaciones ||
+                                    "Sin observaciones"
+                                )}
 
                             </td>
 
+
                             <td>
 
-                                <button
-                                    onclick="verDetalleAsignacion(${asignacion.id})">
+                                <div class="acciones">
 
-                                    Detalles
+                                    <button
+                                        class="btn-detalles"
+                                        onclick="verDetalleAsignacion(${asignacion.id})">
 
-                                </button>
+                                        Detalles
+
+                                    </button>
+
+                                </div>
 
                             </td>
 
@@ -416,9 +981,19 @@ async function verAsignaciones() {
             );
 
 
-            html += "</table>";
+
+            html += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
 
         }
+
 
 
         document.getElementById(
@@ -426,9 +1001,12 @@ async function verAsignaciones() {
         ).innerHTML = html;
 
 
+
     } catch (error) {
 
+
         console.error(error);
+
 
         alert(
             "No se pudo conectar con el servidor."
@@ -439,17 +1017,20 @@ async function verAsignaciones() {
 }
 
 
-// ==========================================
-// DETALLES DE ASIGNACIÓN
-// ==========================================
+
+/* ==================================================
+   DETALLES DE ASIGNACIÓN
+================================================== */
 
 async function verDetalleAsignacion(id) {
 
+
     try {
 
-        // ==================================
-        // OBTENER ASIGNACIÓN
-        // ==================================
+
+        /* ==================================================
+           OBTENER ASIGNACIÓN
+        ================================================== */
 
         const respuestaAsignacion =
             await fetch(
@@ -476,13 +1057,15 @@ async function verDetalleAsignacion(id) {
         }
 
 
-        // ==================================
-        // OBTENER PACIENTE
-        // ==================================
+
+        /* ==================================================
+           OBTENER PACIENTE
+        ================================================== */
 
         const respuestaPaciente =
             await fetch(
-                API + "/pacientes/" +
+                API +
+                "/pacientes/" +
                 asignacion.paciente_id,
                 {
                     headers: encabezados()
@@ -506,13 +1089,15 @@ async function verDetalleAsignacion(id) {
         }
 
 
-        // ==================================
-        // OBTENER PERSONAL
-        // ==================================
+
+        /* ==================================================
+           OBTENER PERSONAL
+        ================================================== */
 
         const respuestaPersonal =
             await fetch(
-                API + "/personal/" +
+                API +
+                "/personal/" +
                 asignacion.personal_id,
                 {
                     headers: encabezados()
@@ -536,154 +1121,233 @@ async function verDetalleAsignacion(id) {
         }
 
 
-        // ==================================
-        // MOSTRAR DETALLES
-        // ==================================
+
+        /* ==================================================
+           MOSTRAR DETALLES
+        ================================================== */
 
         document.getElementById(
             "contenido"
         ).innerHTML = `
 
-            <h3>Detalles de la asignación</h3>
+            <div class="detalles-contenedor">
 
-            <hr>
 
+                <div class="detalles-asignacion">
 
-            <h4>Asignación</h4>
 
-            <p>
+                    <h3 class="detalles-titulo">
 
-                <strong>ID:</strong>
+                        Detalles de la asignación
 
-                ${asignacion.id}
+                    </h3>
 
-            </p>
 
 
-            <p>
+                    <div class="detalles-grid">
 
-                <strong>Fecha de asignación:</strong>
 
-                ${asignacion.fecha_asignacion}
+                        <div class="detalle-item">
 
-            </p>
+                            <strong>
+                                ID:
+                            </strong>
 
+                            ${escapeHtml(
+                                asignacion.id
+                            )}
 
-            <p>
+                        </div>
 
-                <strong>Observaciones:</strong>
 
-                ${asignacion.observaciones ||
-                "Sin observaciones"}
 
-            </p>
+                        <div class="detalle-item">
 
+                            <strong>
+                                Fecha de asignación:
+                            </strong>
 
-            <h4>Paciente</h4>
+                            ${escapeHtml(
+                                asignacion.fecha_asignacion
+                            )}
 
+                        </div>
 
-            <p>
 
-                <strong>Nombre:</strong>
 
-                ${paciente.nombre}
+                        <div class="detalle-item">
 
-                ${paciente.apellido_paterno}
+                            <strong>
+                                Paciente:
+                            </strong>
 
-                ${paciente.apellido_materno || ""}
+                            ${escapeHtml(
+                                paciente.nombre
+                            )}
 
-            </p>
+                            ${escapeHtml(
+                                paciente.apellido_paterno
+                            )}
 
+                            ${escapeHtml(
+                                paciente.apellido_materno || ""
+                            )}
 
-            <p>
+                        </div>
 
-                <strong>Fecha de nacimiento:</strong>
 
-                ${paciente.fecha_nacimiento ||
-                "No registrada"}
 
-            </p>
+                        <div class="detalle-item">
 
+                            <strong>
+                                Teléfono:
+                            </strong>
 
-            <p>
+                            ${escapeHtml(
+                                paciente.telefono ||
+                                "No registrado"
+                            )}
 
-                <strong>Teléfono:</strong>
+                        </div>
 
-                ${paciente.telefono ||
-                "No registrado"}
 
-            </p>
 
+                        <div class="detalle-item">
 
-            <p>
+                            <strong>
+                                Fecha de nacimiento:
+                            </strong>
 
-                <strong>Diagnóstico:</strong>
+                            ${escapeHtml(
+                                paciente.fecha_nacimiento ||
+                                "No registrada"
+                            )}
 
-                ${paciente.diagnostico ||
-                "No registrado"}
+                        </div>
 
-            </p>
 
 
-            <p>
+                        <div class="detalle-item">
 
-                <strong>Estatus:</strong>
+                            <strong>
+                                Estatus:
+                            </strong>
 
-                ${paciente.estatus}
+                            ${escapeHtml(
+                                paciente.estatus ||
+                                "No registrado"
+                            )}
 
-            </p>
+                        </div>
 
 
-            <h4>Personal asignado</h4>
 
+                        <div class="detalle-item">
 
-            <p>
+                            <strong>
+                                Diagnóstico:
+                            </strong>
 
-                <strong>Nombre:</strong>
+                            ${escapeHtml(
+                                paciente.diagnostico ||
+                                "No registrado"
+                            )}
 
-                ${personal.nombre}
+                        </div>
 
-                ${personal.apellido_paterno}
 
-                ${personal.apellido_materno || ""}
 
-            </p>
+                        <div class="detalle-item">
 
+                            <strong>
+                                Personal asignado:
+                            </strong>
 
-            <p>
+                            ${escapeHtml(
+                                personal.nombre
+                            )}
 
-                <strong>Tipo:</strong>
+                            ${escapeHtml(
+                                personal.apellido_paterno
+                            )}
 
-                ${personal.tipo}
+                            ${escapeHtml(
+                                personal.apellido_materno || ""
+                            )}
 
-            </p>
+                        </div>
 
 
-            <p>
 
-                <strong>Especialidad:</strong>
+                        <div class="detalle-item">
 
-                ${personal.especialidad ||
-                "No especificada"}
+                            <strong>
+                                Tipo:
+                            </strong>
 
-            </p>
+                            ${escapeHtml(
+                                personal.tipo
+                            )}
 
+                        </div>
 
-            <br>
 
 
-            <button onclick="verAsignaciones()">
+                        <div class="detalle-item">
 
-                Regresar a asignaciones
+                            <strong>
+                                Especialidad:
+                            </strong>
 
-            </button>
+                            ${escapeHtml(
+                                personal.especialidad ||
+                                "No especificada"
+                            )}
+
+                        </div>
+
+
+
+                        <div class="detalle-item">
+
+                            <strong>
+                                Observaciones:
+                            </strong>
+
+                            ${escapeHtml(
+                                asignacion.observaciones ||
+                                "Sin observaciones"
+                            )}
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <button
+                        class="btn-cerrar-detalles"
+                        onclick="verAsignaciones()">
+
+                        Regresar a asignaciones
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
 
         `;
 
 
     } catch (error) {
 
+
         console.error(error);
+
 
         alert(
             "No se pudo obtener el detalle de la asignación."
@@ -694,138 +1358,187 @@ async function verDetalleAsignacion(id) {
 }
 
 
-// ==========================================
-// FORMULARIO CREAR ASIGNACIÓN
-// ==========================================
+
+/* ==================================================
+   FORMULARIO CREAR ASIGNACIÓN
+================================================== */
 
 function mostrarFormularioAsignacion() {
+
+
+    activarMenu("btnCrearAsignacion");
+
 
     document.getElementById(
         "contenido"
     ).innerHTML = `
 
-        <h3>Crear asignación</h3>
+
+        <h3>
+            Crear asignación
+        </h3>
 
 
-        <label>
-
-            ID del paciente:
-
-        </label>
-
-        <br>
+        <p>
+            Registra una nueva asignación de paciente.
+        </p>
 
 
-        <input
 
-            type="number"
-
-            id="pacienteId"
-
-            min="1"
-
-            required
-
-        >
+        <div class="formulario">
 
 
-        <br><br>
+            <h4>
+                Datos de la asignación
+            </h4>
 
 
-        <label>
 
-            ID del personal:
-
-        </label>
-
-        <br>
+            <div class="form-grid">
 
 
-        <input
+                <!-- PACIENTE -->
 
-            type="number"
+                <div class="campo">
 
-            id="personalId"
+                    <label for="pacienteId">
 
-            min="1"
+                        ID del paciente
 
-            required
-
-        >
+                    </label>
 
 
-        <br><br>
+                    <input
+                        type="number"
+                        id="pacienteId"
+                        min="1"
+                        required
+                        placeholder="Ej. 1"
+                    >
+
+                </div>
 
 
-        <label>
 
-            Fecha de asignación:
+                <!-- PERSONAL -->
 
-        </label>
+                <div class="campo">
 
-        <br>
+                    <label for="personalId">
 
+                        ID del personal
 
-        <input
-
-            type="date"
-
-            id="fechaAsignacion"
-
-            required
-
-        >
+                    </label>
 
 
-        <br><br>
+                    <input
+                        type="number"
+                        id="personalId"
+                        min="1"
+                        required
+                        placeholder="Ej. 1"
+                    >
+
+                </div>
 
 
-        <label>
 
-            Observaciones:
+                <!-- FECHA -->
 
-        </label>
+                <div class="campo">
 
-        <br>
+                    <label for="fechaAsignacion">
 
+                        Fecha de asignación
 
-        <textarea
-
-            id="observaciones"
-
-            rows="4"
-
-            cols="40"
-
-        ></textarea>
+                    </label>
 
 
-        <br><br>
+                    <input
+                        type="date"
+                        id="fechaAsignacion"
+                        min="${obtenerFechaMinima()}"
+                        max="${obtenerFechaActual()}"
+                        required
+                    >
+
+                </div>
 
 
-        <button onclick="guardarAsignacion()">
 
-            Guardar asignación
+                <!-- OBSERVACIONES -->
 
-        </button>
+                <div class="campo campo-completo">
+
+                    <label for="observaciones">
+
+                        Observaciones
+
+                    </label>
 
 
-        <button onclick="verAsignaciones()">
+                    <textarea
+                        id="observaciones"
+                        placeholder="Escribe alguna observación..."
+                    ></textarea>
 
-            Cancelar
+                </div>
 
-        </button>
+
+            </div>
+
+
+
+            <!-- BOTONES -->
+
+            <div class="form-botones">
+
+
+                <button
+                    class="btn-guardar"
+                    onclick="guardarAsignacion()">
+
+                    Guardar asignación
+
+                </button>
+
+
+                <button
+                    class="btn-cancelar"
+                    onclick="verAsignaciones()">
+
+                    Cancelar
+
+                </button>
+
+
+            </div>
+
+
+        </div>
 
     `;
+
+
+    /*
+     * Aplicar nuevamente el rango de fechas
+     * después de crear el formulario.
+     */
+
+    establecerRangoFecha(
+        "fechaAsignacion"
+    );
 
 }
 
 
-// ==========================================
-// GUARDAR ASIGNACIÓN
-// ==========================================
+
+/* ==================================================
+   GUARDAR ASIGNACIÓN
+================================================== */
 
 async function guardarAsignacion() {
+
 
     const paciente_id =
         document.getElementById(
@@ -851,9 +1564,10 @@ async function guardarAsignacion() {
         ).value;
 
 
-    // ==================================
-    // VALIDAR CAMPOS
-    // ==================================
+
+    /* ==================================================
+       VALIDAR CAMPOS
+    ================================================== */
 
     if (
         !paciente_id ||
@@ -861,26 +1575,55 @@ async function guardarAsignacion() {
         !fecha_asignacion
     ) {
 
+
         alert(
             "Completa todos los campos obligatorios."
         );
+
 
         return;
 
     }
 
 
-    // ==================================
-    // VALIDAR IDS
-    // ==================================
+
+    /* ==================================================
+       VALIDAR IDS
+    ================================================== */
 
     if (
         Number(paciente_id) <= 0 ||
         Number(personal_id) <= 0
     ) {
 
+
         alert(
             "Los IDs deben ser mayores que cero."
+        );
+
+
+        return;
+
+    }
+
+
+
+    /* ==================================================
+       VALIDAR FECHA
+    ================================================== */
+
+    if (
+        !fechaDentroDelRango(
+            fecha_asignacion
+        )
+    ) {
+
+        alert(
+            "La fecha de la asignación debe estar entre " +
+            obtenerFechaMinima() +
+            " y " +
+            obtenerFechaActual() +
+            "."
         );
 
         return;
@@ -888,16 +1631,21 @@ async function guardarAsignacion() {
     }
 
 
+
     const datos = {
+
 
         paciente_id:
             Number(paciente_id),
 
+
         personal_id:
             Number(personal_id),
 
+
         fecha_asignacion:
             fecha_asignacion,
+
 
         observaciones:
             observaciones || null
@@ -905,7 +1653,9 @@ async function guardarAsignacion() {
     };
 
 
+
     try {
+
 
         const respuesta =
             await fetch(
@@ -928,25 +1678,29 @@ async function guardarAsignacion() {
             await respuesta.json();
 
 
-        // ==================================
-        // ERROR
-        // ==================================
+
+        /* ==================================================
+           ERROR
+        ================================================== */
 
         if (!respuesta.ok) {
+
 
             alert(
                 resultado.detail ||
                 "No se pudo crear la asignación."
             );
 
+
             return;
 
         }
 
 
-        // ==================================
-        // ÉXITO
-        // ==================================
+
+        /* ==================================================
+           ÉXITO
+        ================================================== */
 
         alert(
             "Asignación creada correctamente."
@@ -958,7 +1712,9 @@ async function guardarAsignacion() {
 
     } catch (error) {
 
+
         console.error(error);
+
 
         alert(
             "No se pudo conectar con el servidor."
@@ -969,11 +1725,13 @@ async function guardarAsignacion() {
 }
 
 
-// ==========================================
-// CERRAR SESIÓN
-// ==========================================
+
+/* ==================================================
+   CERRAR SESIÓN
+================================================== */
 
 function cerrarSesion() {
+
 
     const confirmar =
         confirm(
@@ -988,21 +1746,26 @@ function cerrarSesion() {
     }
 
 
+
     localStorage.removeItem(
         "access_token"
     );
+
 
     localStorage.removeItem(
         "usuario"
     );
 
+
     localStorage.removeItem(
         "rol"
     );
 
+
     localStorage.removeItem(
         "personal_id"
     );
+
 
 
     alert(
@@ -1010,18 +1773,22 @@ function cerrarSesion() {
     );
 
 
+
     window.location.href = "/";
 
 }
 
 
-// ==========================================
-// CARGAR PACIENTES AL ENTRAR
-// ==========================================
+
+/* ==================================================
+   CARGAR PACIENTES AL ENTRAR
+================================================== */
 
 verPacientes();
 
+
 </script>
+
 
 </body>
 

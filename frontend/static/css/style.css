@@ -1,0 +1,1162 @@
+/* ==================================================
+   CLÍNICA LOS OLIVOS
+   ESTILOS GENERALES
+================================================== */
+
+:root {
+    --verde-olivo: #6b7d32;
+    --verde-oscuro: #3f4d1f;
+    --verde-claro: #e8edd8;
+    --verde-suave: #f3f5ed;
+    --blanco: #ffffff;
+    --gris-fondo: #f4f6f2;
+    --gris-texto: #555555;
+    --gris-claro: #777777;
+    --gris-borde: #d9ddd2;
+    --rojo: #b94a48;
+}
+
+
+/* ==================================================
+   CONFIGURACIÓN GENERAL
+================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--gris-fondo);
+    color: var(--gris-texto);
+    font-size: 16px;
+}
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4f6f2,
+            #e8edd8
+        );
+}
+
+
+/* ==================================================
+   CONTENEDOR DEL LOGIN
+================================================== */
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--blanco);
+    padding: 20px 40px 30px;
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.10);
+
+    text-align: center;
+}
+
+
+/* ==================================================
+   LOGO DEL LOGIN
+================================================== */
+
+.login-logo-container {
+    width: 100%;
+    height: 220px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto 5px;
+}
+
+.login-container .logo {
+    display: block;
+    width: 370px;
+    height: 220px;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   TÍTULOS DEL LOGIN
+================================================== */
+
+.login-container h1 {
+    margin: 0;
+    color: var(--verde-oscuro);
+    font-size: 28px;
+}
+
+.subtitle {
+    margin-top: 6px;
+    margin-bottom: 22px;
+    color: #777;
+    font-size: 16px;
+}
+
+
+/* ==================================================
+   FORMULARIO LOGIN
+================================================== */
+
+.form-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--verde-oscuro);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 14px;
+
+    border: 1px solid var(--gris-borde);
+    border-radius: 9px;
+
+    font-size: 16px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--verde-olivo);
+
+    box-shadow:
+        0 0 0 3px rgba(107, 125, 50, 0.15);
+}
+
+
+/* ==================================================
+   BOTÓN PRINCIPAL
+================================================== */
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+
+    border: none;
+    border-radius: 9px;
+
+    background-color: var(--verde-olivo);
+    color: var(--blanco);
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--verde-oscuro);
+    transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   MENSAJES
+================================================== */
+
+#mensaje {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* ==================================================
+   PIE DEL LOGIN
+================================================== */
+
+.login-footer {
+    margin-top: 22px;
+    font-size: 14px;
+    color: #999;
+}
+
+
+/* ==================================================
+   ADMINISTRADOR - DASHBOARD
+================================================== */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ==================================================
+   SIDEBAR
+================================================== */
+
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+
+    background: var(--blanco);
+    border-right: 1px solid var(--gris-borde);
+
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    z-index: 10;
+}
+
+
+/* ==================================================
+   LOGO DEL SIDEBAR
+================================================== */
+
+.sidebar-logo {
+    padding: 15px 15px 18px;
+    text-align: center;
+    border-bottom: 1px solid var(--gris-borde);
+}
+
+.sidebar-logo .logo-container {
+    width: 100%;
+    height: 180px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto 8px;
+}
+
+.sidebar-logo img.logo {
+    display: block;
+
+    width: 150px;
+    height: 150px;
+
+    max-width: 150px;
+    max-height: 150px;
+
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.sidebar-logo h2 {
+    color: var(--verde-oscuro);
+    font-size: 20px;
+    margin: 0 0 5px;
+}
+
+.sidebar-logo p {
+    color: var(--gris-claro);
+    font-size: 14px;
+    margin: 0;
+}
+
+
+/* ==================================================
+   MENÚ
+================================================== */
+
+.menu {
+    padding: 20px 14px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.menu-title {
+    color: #999;
+    font-size: 12px;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+
+    margin: 16px 10px 8px;
+}
+
+.menu button {
+    width: 100%;
+
+    border: none;
+    background: transparent;
+
+    color: #555;
+    text-align: left;
+
+    padding: 12px 13px;
+    border-radius: 8px;
+
+    margin-bottom: 4px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.menu button:hover {
+    background: var(--verde-suave);
+    color: var(--verde-oscuro);
+}
+
+.menu button.activo {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+    font-weight: bold;
+}
+
+
+/* ==================================================
+   CERRAR SESIÓN
+================================================== */
+
+.logout {
+    padding: 16px;
+    border-top: 1px solid var(--gris-borde);
+}
+
+.logout button {
+    width: 100%;
+    padding: 12px;
+
+    border: 1px solid #e2caca;
+    border-radius: 8px;
+
+    background: #fff7f7;
+    color: var(--rojo);
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   CONTENIDO PRINCIPAL
+================================================== */
+
+.main {
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
+    min-height: 100vh;
+
+    padding: 28px 34px;
+}
+
+
+/* ==================================================
+   BARRA SUPERIOR
+================================================== */
+
+.topbar {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.topbar h1 {
+    color: var(--verde-oscuro);
+    font-size: 28px;
+    margin: 0 0 5px;
+}
+
+.topbar p {
+    color: var(--gris-claro);
+    font-size: 16px;
+    margin: 0;
+}
+
+.usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.usuario-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.usuario-info strong {
+    display: block;
+    color: #333;
+    font-size: 16px;
+}
+
+.usuario-info span {
+    display: block;
+    color: var(--gris-claro);
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+
+/* ==================================================
+   BIENVENIDA
+================================================== */
+
+.bienvenida-card {
+    background: #fff;
+
+    border: 1px solid var(--gris-borde);
+    border-left: 5px solid var(--verde-olivo);
+
+    border-radius: 10px;
+
+    padding: 22px 24px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 4px 18px rgba(63, 77, 31, 0.08);
+}
+
+.bienvenida-card h2 {
+    color: var(--verde-oscuro);
+    font-size: 24px;
+    margin: 0 0 7px;
+}
+
+.bienvenida-card p {
+    color: var(--gris-texto);
+    font-size: 17px;
+    margin: 0;
+}
+
+
+/* ==================================================
+   TARJETAS
+================================================== */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+.card {
+    background: #fff;
+
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 4px 18px rgba(63, 77, 31, 0.08);
+}
+
+.card-icon {
+    width: 42px;
+    height: 5px;
+
+    background: var(--verde-olivo);
+
+    border-radius: 5px;
+
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    color: #333;
+    font-size: 18px;
+    margin: 0 0 6px;
+}
+
+.card p {
+    color: var(--gris-claro);
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+
+/* ==================================================
+   CONTENIDO
+================================================== */
+
+.contenido-card {
+    background: #fff;
+
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+
+    padding: 25px;
+
+    min-height: 300px;
+
+    box-shadow:
+        0 4px 18px rgba(63, 77, 31, 0.08);
+}
+
+#contenido h3 {
+    color: var(--verde-oscuro);
+    font-size: 24px;
+    margin: 0 0 8px;
+}
+
+#contenido > p {
+    color: var(--gris-texto);
+    font-size: 16px;
+    margin: 0 0 20px;
+}
+
+
+/* ==================================================
+   BOTÓN NUEVO
+================================================== */
+
+.btn-nuevo {
+    background: var(--verde-olivo);
+    color: white;
+
+    border: none;
+    border-radius: 7px;
+
+    padding: 11px 18px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btn-nuevo:hover {
+    background: var(--verde-oscuro);
+}
+
+
+/* ==================================================
+   FORMULARIOS
+================================================== */
+
+.formulario {
+    background: var(--verde-suave);
+
+    border: 1px solid var(--gris-borde);
+    border-radius: 8px;
+
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.formulario h4 {
+    color: var(--verde-oscuro);
+
+    margin: 0 0 18px;
+
+    font-size: 20px;
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px 20px;
+}
+
+.campo {
+    width: 100%;
+}
+
+.campo-completo {
+    grid-column: 1 / -1;
+}
+
+.campo label {
+    display: block;
+
+    color: #444;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid var(--gris-borde);
+    border-radius: 7px;
+
+    background: white;
+
+    font-size: 16px;
+    color: #333;
+
+    outline: none;
+}
+
+.campo textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: var(--verde-olivo);
+}
+
+.form-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-guardar {
+    border: none;
+    border-radius: 7px;
+
+    background: var(--verde-olivo);
+    color: white;
+
+    padding: 11px 18px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.btn-guardar:hover {
+    background: var(--verde-oscuro);
+}
+
+.btn-cancelar {
+    border: 1px solid var(--gris-borde);
+    border-radius: 7px;
+
+    background: white;
+    color: #555;
+
+    padding: 11px 18px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   TABLAS
+================================================== */
+
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 16px;
+}
+
+th {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+
+    text-align: left;
+
+    padding: 13px 10px;
+
+    border-bottom:
+        1px solid var(--gris-borde);
+
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 10px;
+
+    border-bottom:
+        1px solid var(--gris-borde);
+
+    color: #555;
+
+    vertical-align: middle;
+}
+
+tr:hover td {
+    background: #fafbf8;
+}
+
+
+/* ==================================================
+   BOTONES DE TABLA
+================================================== */
+
+.acciones {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.btn-editar {
+    border: 1px solid #cbd5df;
+
+    background: #f4f7fa;
+    color: #55789c;
+
+    border-radius: 6px;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn-editar:hover {
+    background: #e8eef4;
+}
+
+.btn-detalles {
+    border: 1px solid #cfd8bb;
+
+    background: #f4f7ea;
+    color: var(--verde-oscuro);
+
+    border-radius: 6px;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn-detalles:hover {
+    background: var(--verde-claro);
+}
+
+.btn-eliminar {
+    border: 1px solid #e2caca;
+
+    background: #fff7f7;
+    color: var(--rojo);
+
+    border-radius: 6px;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn-eliminar:hover {
+    background: #fbeaea;
+}
+
+/* ==================================================
+   DETALLES DE ASIGNACIÓN
+================================================== */
+
+.detalles-contenedor {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.detalles-asignacion {
+    padding: 20px 25px;
+
+    background: var(--verde-suave);
+
+    border: 1px solid var(--gris-borde);
+    border-left: 4px solid var(--verde-olivo);
+
+    border-radius: 9px;
+}
+
+.detalles-titulo {
+    color: var(--verde-oscuro);
+
+    font-size: 24px;
+    font-weight: bold;
+
+    margin: 0 0 18px 0;
+}
+
+.detalles-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px 30px;
+}
+
+.detalle-item {
+    color: #333;
+
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.detalle-item strong {
+    color: var(--verde-oscuro);
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn-cerrar-detalles {
+    margin-top: 20px;
+
+    padding: 10px 18px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: var(--verde-olivo);
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.btn-cerrar-detalles:hover {
+    background: var(--verde-oscuro);
+}
+
+/* ==================================================
+   MENSAJES
+================================================== */
+
+.mensaje {
+    padding: 13px;
+
+    border-radius: 7px;
+
+    margin-bottom: 15px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    display: none;
+}
+
+.mensaje.exito {
+    display: block;
+
+    background: #eef5e5;
+    color: var(--verde-oscuro);
+
+    border: 1px solid #d4dfbf;
+}
+
+.mensaje.error {
+    display: block;
+
+    background: #fff1f1;
+    color: var(--rojo);
+
+    border: 1px solid #eccaca;
+}
+
+
+/* ==================================================
+   INICIO
+================================================== */
+
+.inicio-opciones {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+.inicio-opcion {
+    border: 1px solid var(--gris-borde);
+    border-radius: 8px;
+
+    padding: 18px;
+
+    background: #fff;
+
+    cursor: pointer;
+}
+
+.inicio-opcion:hover {
+    border-color: var(--verde-olivo);
+    background: var(--verde-suave);
+}
+
+.inicio-opcion h4 {
+    color: var(--verde-oscuro);
+
+    margin: 0 0 6px;
+
+    font-size: 18px;
+}
+
+.inicio-opcion p {
+    color: var(--gris-claro);
+
+    font-size: 16px;
+
+    margin: 0;
+}
+
+
+/* ==================================================
+   RESPONSIVE - TABLET
+================================================== */
+
+@media (max-width: 1100px) {
+
+    .cards {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    #contenido table {
+        min-width: 800px;
+    }
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+
+        width: calc(100% - 210px);
+
+        padding: 22px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-completo {
+        grid-column: auto;
+    }
+
+    .detalles-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ==================================================
+   RESPONSIVE - TELÉFONO
+================================================== */
+
+@media (max-width: 600px) {
+
+    .dashboard {
+        display: block;
+    }
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+    }
+
+    .main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 18px;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .inicio-opciones {
+        grid-template-columns: 1fr;
+    }
+
+    .contenido-card {
+        padding: 18px;
+    }
+
+    .detalles-asignacion {
+        padding: 22px;
+    }
+
+    .detalles-titulo {
+        font-size: 25px;
+    }
+
+    .detalle-item,
+    .detalle-item strong {
+        font-size: 20px;
+    }
+
+    .btn-cerrar-detalles {
+        font-size: 17px;
+    }
+}
+
+
+/* ==================================================
+   LOGIN RESPONSIVE
+================================================== */
+
+@media (max-width: 768px) {
+
+    .login-container {
+        max-width: 430px;
+
+        padding:
+            15px
+            25px
+            28px;
+    }
+
+    .login-logo-container {
+        width: 100%;
+        height: 220px;
+    }
+
+    .login-container .logo {
+        width: 370px;
+        max-width: 100%;
+        height: 220px;
+        object-fit: contain;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .login-page {
+        padding: 15px;
+    }
+
+    .login-container {
+        padding:
+            12px
+            20px
+            25px;
+
+        border-radius: 14px;
+    }
+
+    .login-logo-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .login-container .logo {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+    }
+
+    .login-container h1 {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .btn-primary {
+        padding: 13px;
+    }
+
+    .login-footer {
+        margin-top: 20px;
+    }
+}

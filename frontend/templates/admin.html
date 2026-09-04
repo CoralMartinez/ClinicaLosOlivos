@@ -7,3014 +7,3137 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Panel Administrador - Clínica Los Olivos</title>
+    <title>Administrador - Clínica Los Olivos</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-    <h1>Clínica Los Olivos</h1>
+<div class="dashboard">
 
-    <h2>Panel de Administrador</h2>
+    <!-- ==================================================
+         SIDEBAR
+    ================================================== -->
 
-    <p id="bienvenida"></p>
+    <aside class="sidebar">
 
+        <div class="sidebar-logo">
 
-    <!-- ==========================================
-         MENÚ PRINCIPAL
-    =========================================== -->
+            <div class="logo-container">
 
-    <h3>Administración del sistema</h3>
+                <img
+                    src="{{ url_for('static', filename='img/logo.png') }}"
+                    alt="Clínica Los Olivos"
+                    class="logo"
+                >
 
-    <button onclick="verPersonal()">
-        Ver personal
-    </button>
+            </div>
 
-    <button onclick="mostrarFormularioPersonal()">
-        Registrar personal
-    </button>
+            <h2>Clínica Los Olivos</h2>
 
-    <br><br>
+            <p>Panel de administración</p>
 
-    <button onclick="verUsuarios()">
-        Ver usuarios
-    </button>
+        </div>
 
-    <button onclick="mostrarFormularioUsuario()">
-        Registrar usuario
-    </button>
 
-    <br><br>
+        <nav class="menu">
 
-    <button onclick="verPacientes()">
-        Ver pacientes
-    </button>
+            <div class="menu-title">
+                Administración
+            </div>
 
-    <button onclick="mostrarFormularioPaciente()">
-        Registrar paciente
-    </button>
+            <button
+                type="button"
+                onclick="mostrarSeccion('inicio', this)"
+                class="activo"
+            >
+                Inicio
+            </button>
 
-    <br><br>
+            <button
+                type="button"
+                onclick="mostrarSeccion('personal', this)"
+            >
+                Personal
+            </button>
 
-    <button onclick="verAsignaciones()">
-        Ver asignaciones
-    </button>
+            <button
+                type="button"
+                onclick="mostrarSeccion('usuarios', this)"
+            >
+                Usuarios
+            </button>
 
-    <button onclick="mostrarFormularioAsignacion()">
-        Crear asignación
-    </button>
+            <button
+                type="button"
+                onclick="mostrarSeccion('pacientes', this)"
+            >
+                Pacientes
+            </button>
 
-    <hr>
+            <button
+                type="button"
+                onclick="mostrarSeccion('asignaciones', this)"
+            >
+                Asignaciones
+            </button>
 
+        </nav>
 
-    <!-- ==========================================
-         CONTENIDO
-    =========================================== -->
 
-    <div id="contenido">
+        <div class="logout">
 
-        <p>
-            Selecciona una opción para comenzar.
-        </p>
+            <button type="button" onclick="cerrarSesion()">
+                Cerrar sesión
+            </button>
 
-    </div>
+        </div>
 
+    </aside>
 
-    <hr>
 
+    <!-- ==================================================
+         CONTENIDO PRINCIPAL
+    ================================================== -->
 
-    <!-- ==========================================
-         CERRAR SESIÓN
-    =========================================== -->
+    <main class="main">
 
-    <button onclick="cerrarSesion()">
-        Cerrar sesión
-    </button>
+        <div class="topbar">
 
+            <div>
 
-    <script>
+                <h1>Panel de Administración</h1>
 
-        const API = "http://127.0.0.1:8000";
+                <p>Gestión de información de la clínica</p>
 
+            </div>
 
-        // ==========================================
-        // TOKEN
-        // ==========================================
 
-        function obtenerToken() {
+            <div class="usuario-info">
 
-            return localStorage.getItem("access_token");
+                <div class="usuario-icon">
+                    A
+                </div>
 
-        }
+                <div>
 
+                    <strong id="nombreUsuario">
+                        Administrador
+                    </strong>
 
-        function encabezados() {
+                    <span>
+                        Administrador
+                    </span>
 
-            return {
+                </div>
 
-                "Content-Type": "application/json",
+            </div>
 
-                "Authorization":
-                    "Bearer " + obtenerToken()
+        </div>
 
-            };
 
-        }
+        <!-- ==================================================
+             INICIO
+        ================================================== -->
 
+        <section id="inicio">
 
-        // ==========================================
-        // COMPROBAR SESIÓN
-        // ==========================================
+            <div class="bienvenida-card">
 
-        const rol = localStorage.getItem("rol");
+                <h2>
+                    Bienvenido al sistema
+                </h2>
 
-        const usuario = localStorage.getItem("usuario");
+                <p>
+                    Desde este panel puedes administrar el personal,
+                    usuarios, pacientes y asignaciones de la Clínica Los Olivos.
+                </p>
 
+            </div>
 
-        if (!obtenerToken() || rol !== "Admin") {
 
-            alert(
-                "No tienes permisos para acceder al panel de administrador."
-            );
+            <div class="cards">
 
-            window.location.href = "/";
+                <div class="card">
 
-        }
+                    <div class="card-icon"></div>
 
+                    <h3>Personal</h3>
 
-        document.getElementById("bienvenida").textContent =
-            "Bienvenido, " + usuario + ".";
+                    <p>
+                        Registra y administra médicos y enfermeros.
+                    </p>
 
+                </div>
 
-        // ==========================================
-        // PERSONAL
-        // ==========================================
 
-        async function verPersonal() {
+                <div class="card">
 
-            try {
+                    <div class="card-icon"></div>
 
-                const respuesta = await fetch(
-                    API + "/personal/",
-                    {
-                        headers: encabezados()
-                    }
-                );
+                    <h3>Usuarios</h3>
 
-                const datos = await respuesta.json();
+                    <p>
+                        Administra las cuentas de acceso al sistema.
+                    </p>
 
-                if (!respuesta.ok) {
+                </div>
 
-                    alert(
-                        datos.detail ||
-                        "No se pudo consultar el personal."
-                    );
 
-                    return;
-                }
+                <div class="card">
 
+                    <div class="card-icon"></div>
 
-                let html = "<h3>Personal registrado</h3>";
+                    <h3>Pacientes</h3>
 
+                    <p>
+                        Registra y administra la información de los pacientes.
+                    </p>
 
-                if (datos.length === 0) {
+                </div>
 
-                    html +=
-                        "<p>No hay personal registrado.</p>";
 
-                } else {
+                <div class="card">
 
-                    html += "<table border='1'>";
+                    <div class="card-icon"></div>
 
-                    html += `
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellido paterno</th>
-                            <th>Apellido materno</th>
-                            <th>Fecha nacimiento</th>
-                            <th>Tipo</th>
-                            <th>Especialidad</th>
-                            <th>Teléfono</th>
-                            <th>Acciones</th>
-                        </tr>
-                    `;
+                    <h3>Asignaciones</h3>
 
+                    <p>
+                        Asigna pacientes al personal de la clínica.
+                    </p>
 
-                    datos.forEach(persona => {
+                </div>
 
-                        html += `
-                            <tr>
+            </div>
 
-                                <td>${persona.id}</td>
 
-                                <td>${persona.nombre}</td>
+            <div class="contenido-card">
 
-                                <td>
-                                    ${persona.apellido_paterno}
-                                </td>
+                <div id="contenidoInicio">
 
-                                <td>
-                                    ${persona.apellido_materno || ""}
-                                </td>
+                    <h3>
+                        Opciones disponibles
+                    </h3>
 
-                                <td>
-                                    ${persona.fecha_nacimiento || ""}
-                                </td>
+                    <p>
+                        Selecciona una opción del menú para comenzar.
+                    </p>
 
-                                <td>
-                                    ${persona.tipo}
-                                </td>
+                </div>
 
-                                <td>
-                                    ${persona.especialidad || ""}
-                                </td>
+            </div>
 
-                                <td>
-                                    ${persona.telefono || ""}
-                                </td>
+        </section>
 
-                                <td>
 
-                                    <button
-                                        onclick="editarPersonal(${persona.id})">
-                                        Modificar
-                                    </button>
+        <!-- ==================================================
+             CONTENIDO DINÁMICO
+        ================================================== -->
 
-                                    <button
-                                        onclick="eliminarPersonal(${persona.id})">
-                                        Eliminar
-                                    </button>
+        <section
+            id="contenido"
+            style="display:none;"
+        ></section>
 
-                                </td>
+    </main>
 
-                            </tr>
-                        `;
+</div>
 
-                    });
 
+<script>
 
-                    html += "</table>";
+    /* ==================================================
+       CONFIGURACIÓN
+    ================================================== */
 
-                }
+    const API = "http://192.168.0.252:8000";
 
 
-                document.getElementById("contenido").innerHTML =
-                    html;
+    /* ==================================================
+       FECHAS
+    ================================================== */
 
+    function obtenerFechaActual() {
 
-            } catch (error) {
+        const hoy = new Date();
 
-                console.error(error);
+        const año = hoy.getFullYear();
 
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
+        const mes = String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
 
-            }
+        const dia = String(
+            hoy.getDate()
+        ).padStart(2, "0");
 
-        }
+        return `${año}-${mes}-${dia}`;
 
+    }
 
-        // ==========================================
-        // FORMULARIO PERSONAL
-        // ==========================================
 
-        function mostrarFormularioPersonal() {
+    function obtenerFechaMinima() {
 
-            document.getElementById("contenido").innerHTML = `
+        const hoy = new Date();
 
-                <h3>Registrar personal</h3>
-
-                <form id="formPersonal">
-
-                    <label>Nombre:</label><br>
-
-                    <input
-                        type="text"
-                        id="nombrePersonal"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Apellido paterno:</label><br>
-
-                    <input
-                        type="text"
-                        id="apellidoPaternoPersonal"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Apellido materno:</label><br>
-
-                    <input
-                        type="text"
-                        id="apellidoMaternoPersonal"
-                    >
-
-                    <br><br>
-
-                    <label>Fecha de nacimiento:</label><br>
-
-                    <input
-                        type="date"
-                        id="fechaNacimientoPersonal"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Tipo:</label><br>
-
-                    <select id="tipoPersonal" required>
-
-                        <option value="">
-                            Selecciona una opción
-                        </option>
-
-                        <option value="Doctor">
-                            Doctor
-                        </option>
-
-                        <option value="Enfermero">
-                            Enfermero
-                        </option>
-
-                    </select>
-
-                    <br><br>
-
-                    <label>Especialidad:</label><br>
-
-                   <select id="especialidadPersonal">
-
-    <option value="">
-        Selecciona una especialidad
-    </option>
-
-    <option value="Medicina General">
-        Medicina General
-    </option>
-
-    <option value="Pediatría">
-        Pediatría
-    </option>
-
-    <option value="Ginecología">
-        Ginecología
-    </option>
-
-    <option value="Cardiología">
-        Cardiología
-    </option>
-
-    <option value="Traumatología">
-        Traumatología
-    </option>
-
-    <option value="Enfermería General">
-        Enfermería General
-    </option>
-
-</select>
-                    <br><br>
-
-                    <label>Teléfono:</label><br>
-
-                    <input
-                        type="text"
-                        id="telefonoPersonal"
-                        maxlength="10"
-                    >
-
-                    <br><br>
-
-                    <button type="submit">
-                        Guardar personal
-                    </button>
-
-                </form>
-
-            `;
-
-
-            document
-                .getElementById("formPersonal")
-                .addEventListener(
-                    "submit",
-                    guardarPersonal
-                );
-
-        }
-
-
-        // ==========================================
-        // GUARDAR PERSONAL
-        // ==========================================
-
-        async function guardarPersonal(event) {
-
-            event.preventDefault();
-
-
-            const nombre =
-                document.getElementById(
-                    "nombrePersonal"
-                ).value.trim();
-
-
-            const apellido_paterno =
-                document.getElementById(
-                    "apellidoPaternoPersonal"
-                ).value.trim();
-
-
-            const apellido_materno =
-                document.getElementById(
-                    "apellidoMaternoPersonal"
-                ).value.trim();
-
-
-            const fecha_nacimiento =
-                document.getElementById(
-                    "fechaNacimientoPersonal"
-                ).value;
-
-
-            const tipo =
-                document.getElementById(
-                    "tipoPersonal"
-                ).value;
-
-
-            const especialidad =
-                document.getElementById(
-                    "especialidadPersonal"
-                ).value;
-
-
-            const telefono =
-                document.getElementById(
-                    "telefonoPersonal"
-                ).value.trim();
-
-
-            if (!nombre || !apellido_paterno) {
-
-                alert(
-                    "Completa los datos obligatorios."
-                );
-
-                return;
-
-            }
-
-
-            if (!fecha_nacimiento) {
-
-                alert(
-                    "Selecciona la fecha de nacimiento."
-                );
-
-                return;
-
-            }
-
-
-            if (!tipo) {
-
-                alert(
-                    "Selecciona el tipo de personal."
-                );
-
-                return;
-
-            }
-
-
-            if (telefono && !/^\d{10}$/.test(telefono)) {
-
-                alert(
-                    "El teléfono debe contener exactamente 10 dígitos."
-                );
-
-                return;
-
-            }
-
-
-            const confirmar = confirm(
-                "¿Deseas registrar este personal?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/personal/",
-                    {
-                        method: "POST",
-                        headers: encabezados(),
-
-                        body: JSON.stringify({
-
-                            nombre,
-                            apellido_paterno,
-                            apellido_materno:
-                                apellido_materno || null,
-                            fecha_nacimiento,
-                            tipo,
-                            especialidad:
-                                especialidad || null,
-                            telefono:
-                                telefono || null
-
-                        })
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo registrar el personal."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Personal registrado correctamente."
-                );
-
-
-                verPersonal();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // MODIFICAR PERSONAL
-        // ==========================================
-
-        async function editarPersonal(id) {
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/personal/" + id,
-                    {
-                        headers: encabezados()
-                    }
-                );
-
-
-                const persona = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        persona.detail ||
-                        "No se pudo consultar el personal."
-                    );
-
-                    return;
-
-                }
-
-
-                document.getElementById("contenido").innerHTML = `
-
-                    <h3>Modificar personal</h3>
-
-                    <form id="formEditarPersonal">
-
-                        <label>Nombre:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarNombre"
-                            value="${persona.nombre}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Apellido paterno:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarApellidoPaterno"
-                            value="${persona.apellido_paterno}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Apellido materno:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarApellidoMaterno"
-                            value="${persona.apellido_materno || ""}"
-                        >
-
-                        <br><br>
-
-                        <label>Fecha de nacimiento:</label><br>
-
-                        <input
-                            type="date"
-                            id="editarFechaNacimiento"
-                            value="${persona.fecha_nacimiento || ""}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Tipo:</label><br>
-
-                        <select id="editarTipo" required>
-
-                            <option value="Doctor">
-                                Doctor
-                            </option>
-
-                            <option value="Enfermero">
-                                Enfermero
-                            </option>
-
-                        </select>
-
-                        <br><br>
-
-                        <label>Especialidad:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarEspecialidad"
-                            value="${persona.especialidad || ""}"
-                        >
-
-                        <br><br>
-
-                        <label>Teléfono:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarTelefono"
-                            value="${persona.telefono || ""}"
-                            maxlength="10"
-                        >
-
-                        <br><br>
-
-                        <button type="submit">
-                            Guardar cambios
-                        </button>
-
-                        <button
-                            type="button"
-                            onclick="verPersonal()">
-                            Cancelar
-                        </button>
-
-                    </form>
-
-                `;
-
-
-                document.getElementById("editarTipo").value =
-                    persona.tipo;
-
-
-                document
-                    .getElementById("formEditarPersonal")
-                    .addEventListener(
-                        "submit",
-                        async function(event) {
-
-                            event.preventDefault();
-
-
-                            const telefono =
-                                document.getElementById(
-                                    "editarTelefono"
-                                ).value.trim();
-
-
-                            if (
-                                telefono &&
-                                !/^\d{10}$/.test(telefono)
-                            ) {
-
-                                alert(
-                                    "El teléfono debe contener exactamente 10 dígitos."
-                                );
-
-                                return;
-
-                            }
-
-
-                            const confirmar = confirm(
-                                "¿Deseas guardar los cambios?"
-                            );
-
-
-                            if (!confirmar) {
-
-                                return;
-
-                            }
-
-
-                            try {
-
-                                const respuesta =
-                                    await fetch(
-                                        API +
-                                        "/personal/" +
-                                        id,
-                                        {
-                                            method: "PUT",
-
-                                            headers:
-                                                encabezados(),
-
-                                            body:
-                                                JSON.stringify({
-
-                                                    nombre:
-                                                        document
-                                                        .getElementById(
-                                                            "editarNombre"
-                                                        )
-                                                        .value
-                                                        .trim(),
-
-                                                    apellido_paterno:
-                                                        document
-                                                        .getElementById(
-                                                            "editarApellidoPaterno"
-                                                        )
-                                                        .value
-                                                        .trim(),
-
-                                                    apellido_materno:
-                                                        document
-                                                        .getElementById(
-                                                            "editarApellidoMaterno"
-                                                        )
-                                                        .value
-                                                        .trim() ||
-                                                        null,
-
-                                                    fecha_nacimiento:
-                                                        document
-                                                        .getElementById(
-                                                            "editarFechaNacimiento"
-                                                        )
-                                                        .value,
-
-                                                    tipo:
-                                                        document
-                                                        .getElementById(
-                                                            "editarTipo"
-                                                        )
-                                                        .value,
-
-                                                    especialidad:
-                                                        document
-                                                        .getElementById(
-                                                            "editarEspecialidad"
-                                                        )
-                                                        .value
-                                                        .trim() ||
-                                                        null,
-
-                                                    telefono:
-                                                        telefono ||
-                                                        null
-
-                                                })
-                                        }
-                                    );
-
-
-                                const datos =
-                                    await respuesta.json();
-
-
-                                if (!respuesta.ok) {
-
-                                    alert(
-                                        datos.detail ||
-                                        "No se pudo modificar el personal."
-                                    );
-
-                                    return;
-
-                                }
-
-
-                                alert(
-                                    "Personal modificado correctamente."
-                                );
-
-
-                                verPersonal();
-
-
-                            } catch (error) {
-
-                                console.error(error);
-
-                                alert(
-                                    "No se pudo conectar con el servidor."
-                                );
-
-                            }
-
-                        }
-                    );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // ELIMINAR PERSONAL
-        // ==========================================
-
-        async function eliminarPersonal(id) {
-
-            const confirmar = confirm(
-                "¿Estás seguro de que deseas eliminar este personal?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/personal/" + id,
-                    {
-                        method: "DELETE",
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo eliminar el personal."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Personal eliminado correctamente."
-                );
-
-
-                verPersonal();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // USUARIOS
-        // ==========================================
-
-        async function verUsuarios() {
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/usuarios/",
-                    {
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudieron consultar los usuarios."
-                    );
-
-                    return;
-
-                }
-
-
-                let html =
-                    "<h3>Usuarios registrados</h3>";
-
-
-                if (datos.length === 0) {
-
-                    html +=
-                        "<p>No hay usuarios registrados.</p>";
-
-                } else {
-
-                    html += "<table border='1'>";
-
-                    html += `
-                        <tr>
-                            <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Rol</th>
-                            <th>Personal ID</th>
-                            <th>Acciones</th>
-                        </tr>
-                    `;
-
-
-                    datos.forEach(usuario => {
-
-                        html += `
-                            <tr>
-
-                                <td>${usuario.id}</td>
-
-                                <td>${usuario.usuario}</td>
-
-                                <td>${usuario.rol}</td>
-
-                                <td>
-                                    ${usuario.personal_id || ""}
-                                </td>
-
-                                <td>
-
-                                    <button
-                                        onclick="editarUsuario(${usuario.id})">
-                                        Modificar
-                                    </button>
-
-                                    <button
-                                        onclick="eliminarUsuario(${usuario.id})">
-                                        Eliminar
-                                    </button>
-
-                                </td>
-
-                            </tr>
-                        `;
-
-                    });
-
-
-                    html += "</table>";
-
-                }
-
-
-                document.getElementById("contenido").innerHTML =
-                    html;
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // FORMULARIO USUARIO
-        // ==========================================
-
-        function mostrarFormularioUsuario() {
-
-            document.getElementById("contenido").innerHTML = `
-
-                <h3>Registrar usuario</h3>
-
-                <form id="formUsuario">
-
-                    <label>Usuario:</label><br>
-
-                    <input
-                        type="text"
-                        id="nuevoUsuario"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Contraseña:</label><br>
-
-                    <input
-                        type="password"
-                        id="nuevaPassword"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Rol:</label><br>
-
-                    <select id="nuevoRol" required>
-
-                        <option value="">
-                            Selecciona un rol
-                        </option>
-
-                        <option value="Admin">
-                            Administrador
-                        </option>
-
-                        <option value="Doctor">
-                            Doctor
-                        </option>
-
-                        <option value="Enfermero">
-                            Enfermero
-                        </option>
-
-                    </select>
-
-                    <br><br>
-
-                    <label>ID del personal:</label><br>
-
-                    <input
-                        type="number"
-                        id="nuevoPersonalId"
-                        min="1"
-                    >
-
-                    <br><br>
-
-                    <button type="submit">
-                        Registrar usuario
-                    </button>
-
-                </form>
-
-            `;
-
-
-            document
-                .getElementById("formUsuario")
-                .addEventListener(
-                    "submit",
-                    guardarUsuario
-                );
-
-        }
-
-
-        // ==========================================
-        // GUARDAR USUARIO
-        // ==========================================
-
-        async function guardarUsuario(event) {
-
-            event.preventDefault();
-
-
-            const usuario =
-                document.getElementById(
-                    "nuevoUsuario"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "nuevaPassword"
-                ).value;
-
-
-            const rol =
-                document.getElementById(
-                    "nuevoRol"
-                ).value;
-
-
-            const personal_id =
-                document.getElementById(
-                    "nuevoPersonalId"
-                ).value;
-
-
-            if (!usuario || !password || !rol) {
-
-                alert(
-                    "Completa todos los campos obligatorios."
-                );
-
-                return;
-
-            }
-
-
-            const confirmar = confirm(
-                "¿Deseas registrar este usuario?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/usuarios/",
-                    {
-                        method: "POST",
-
-                        headers: encabezados(),
-
-                        body: JSON.stringify({
-
-                            usuario,
-
-                            password,
-
-                            rol,
-
-                            personal_id:
-                                personal_id
-                                ? Number(personal_id)
-                                : null
-
-                        })
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo registrar el usuario."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Usuario registrado correctamente."
-                );
-
-
-                verUsuarios();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // MODIFICAR USUARIO
-        // ==========================================
-
-        async function editarUsuario(id) {
-
-            alert(
-                "Para modificar un usuario se solicitarán nuevamente sus datos."
-            );
-
-
-            const usuario = prompt(
-                "Nuevo nombre de usuario:"
-            );
-
-
-            if (usuario === null) {
-
-                return;
-
-            }
-
-
-            const password = prompt(
-                "Nueva contraseña:"
-            );
-
-
-            if (password === null) {
-
-                return;
-
-            }
-
-
-            const rol = prompt(
-                "Nuevo rol (Admin, Doctor o Enfermero):"
-            );
-
-
-            if (rol === null) {
-
-                return;
-
-            }
-
-
-            const personal_id = prompt(
-                "ID del personal relacionado (opcional):"
-            );
-
-
-            if (
-                rol !== "Admin" &&
-                rol !== "Doctor" &&
-                rol !== "Enfermero"
-            ) {
-
-                alert(
-                    "El rol ingresado no es válido."
-                );
-
-                return;
-
-            }
-
-
-            const confirmar = confirm(
-                "¿Deseas guardar los cambios del usuario?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/usuarios/" + id,
-                    {
-                        method: "PUT",
-
-                        headers: encabezados(),
-
-                        body: JSON.stringify({
-
-                            usuario:
-                                usuario.trim(),
-
-                            password,
-
-                            rol,
-
-                            personal_id:
-                                personal_id
-                                ? Number(personal_id)
-                                : null
-
-                        })
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo modificar el usuario."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Usuario modificado correctamente."
-                );
-
-
-                verUsuarios();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // ELIMINAR USUARIO
-        // ==========================================
-
-        async function eliminarUsuario(id) {
-
-            const confirmar = confirm(
-                "¿Estás seguro de que deseas eliminar este usuario?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/usuarios/" + id,
-                    {
-                        method: "DELETE",
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo eliminar el usuario."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Usuario eliminado correctamente."
-                );
-
-
-                verUsuarios();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // PACIENTES
-        // ==========================================
-
-        async function verPacientes() {
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/pacientes/",
-                    {
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudieron consultar los pacientes."
-                    );
-
-                    return;
-
-                }
-
-
-                let html =
-                    "<h3>Pacientes registrados</h3>";
-
-
-                if (datos.length === 0) {
-
-                    html +=
-                        "<p>No hay pacientes registrados.</p>";
-
-                } else {
-
-                    html += "<table border='1'>";
-
-                    html += `
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Fecha nacimiento</th>
-                            <th>Teléfono</th>
-                            <th>Diagnóstico</th>
-                            <th>Estatus</th>
-                            <th>Acciones</th>
-                        </tr>
-                    `;
-
-
-                    datos.forEach(paciente => {
-
-                        html += `
-                            <tr>
-
-                                <td>${paciente.id}</td>
-
-                                <td>${paciente.nombre}</td>
-
-                                <td>
-                                    ${paciente.apellido_paterno}
-                                    ${paciente.apellido_materno || ""}
-                                </td>
-
-                                <td>
-                                    ${paciente.fecha_nacimiento || ""}
-                                </td>
-
-                                <td>
-                                    ${paciente.telefono || ""}
-                                </td>
-
-                                <td>
-                                    ${paciente.diagnostico || ""}
-                                </td>
-
-                                <td>
-                                    ${paciente.estatus}
-                                </td>
-
-                                <td>
-
-                                    <button
-                                        onclick="editarPaciente(${paciente.id})">
-                                        Modificar
-                                    </button>
-
-                                    <button
-                                        onclick="eliminarPaciente(${paciente.id})">
-                                        Eliminar
-                                    </button>
-
-                                </td>
-
-                            </tr>
-                        `;
-
-                    });
-
-
-                    html += "</table>";
-
-                }
-
-
-                document.getElementById("contenido").innerHTML =
-                    html;
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // REGISTRAR PACIENTE
-        // ==========================================
-
-        function mostrarFormularioPaciente() {
-
-            document.getElementById("contenido").innerHTML = `
-
-                <h3>Registrar paciente</h3>
-
-                <form id="formPaciente">
-
-                    <label>Nombre:</label><br>
-
-                    <input
-                        type="text"
-                        id="nombrePaciente"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Apellido paterno:</label><br>
-
-                    <input
-                        type="text"
-                        id="apellidoPaternoPaciente"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Apellido materno:</label><br>
-
-                    <input
-                        type="text"
-                        id="apellidoMaternoPaciente"
-                    >
-
-                    <br><br>
-
-                    <label>Fecha de nacimiento:</label><br>
-
-                    <input
-                        type="date"
-                        id="fechaNacimientoPaciente"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Teléfono:</label><br>
-
-                    <input
-                        type="text"
-                        id="telefonoPaciente"
-                        maxlength="10"
-                    >
-
-                    <br><br>
-
-                    <label>Diagnóstico:</label><br>
-
-                    <input
-                        type="text"
-                        id="diagnosticoPaciente"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Estatus:</label><br>
-
-                    <select
-                        id="estatusPaciente"
-                        required
-                    >
-
-                        <option value="">
-                            Selecciona un estatus
-                        </option>
-
-                        <option value="Estable">
-                            Estable
-                        </option>
-
-                        <option value="En observación">
-                            En observación
-                        </option>
-
-                        <option value="Crítico">
-                            Crítico
-                        </option>
-
-                        <option value="Alta">
-                            Alta
-                        </option>
-
-                    </select>
-
-                    <br><br>
-
-                    <button type="submit">
-                        Registrar paciente
-                    </button>
-
-                </form>
-
-            `;
-
-
-            document
-                .getElementById("formPaciente")
-                .addEventListener(
-                    "submit",
-                    guardarPaciente
-                );
-
-        }
-
-
-        // ==========================================
-        // GUARDAR PACIENTE
-        // ==========================================
-
-        async function guardarPaciente(event) {
-
-            event.preventDefault();
-
-
-            const nombre =
-                document.getElementById(
-                    "nombrePaciente"
-                ).value.trim();
-
-
-            const apellido_paterno =
-                document.getElementById(
-                    "apellidoPaternoPaciente"
-                ).value.trim();
-
-
-            const apellido_materno =
-                document.getElementById(
-                    "apellidoMaternoPaciente"
-                ).value.trim();
-
-
-            const fecha_nacimiento =
-                document.getElementById(
-                    "fechaNacimientoPaciente"
-                ).value;
-
-
-            const telefono =
-                document.getElementById(
-                    "telefonoPaciente"
-                ).value.trim();
-
-
-            const diagnostico =
-                document.getElementById(
-                    "diagnosticoPaciente"
-                ).value.trim();
-
-
-            const estatus =
-                document.getElementById(
-                    "estatusPaciente"
-                ).value;
-
-
-            if (
-                !nombre ||
-                !apellido_paterno ||
-                !fecha_nacimiento ||
-                !diagnostico ||
-                !estatus
-            ) {
-
-                alert(
-                    "Completa todos los campos obligatorios."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                telefono &&
-                !/^\d{10}$/.test(telefono)
-            ) {
-
-                alert(
-                    "El teléfono debe contener exactamente 10 dígitos."
-                );
-
-                return;
-
-            }
-
-
-            const confirmar = confirm(
-                "¿Deseas registrar este paciente?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/pacientes/",
-                    {
-                        method: "POST",
-
-                        headers: encabezados(),
-
-                        body: JSON.stringify({
-
-                            nombre,
-
-                            apellido_paterno,
-
-                            apellido_materno:
-                                apellido_materno || null,
-
-                            fecha_nacimiento,
-
-                            telefono:
-                                telefono || null,
-
-                            diagnostico,
-
-                            estatus
-
-                        })
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo registrar el paciente."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Paciente registrado correctamente."
-                );
-
-
-                verPacientes();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // MODIFICAR PACIENTE
-        // ==========================================
-
-        async function editarPaciente(id) {
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/pacientes/" + id,
-                    {
-                        headers: encabezados()
-                    }
-                );
-
-
-                const paciente =
-                    await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        paciente.detail ||
-                        "No se pudo consultar el paciente."
-                    );
-
-                    return;
-
-                }
-
-
-                document.getElementById("contenido").innerHTML = `
-
-                    <h3>Modificar paciente</h3>
-
-                    <form id="formEditarPaciente">
-
-                        <label>Nombre:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarNombrePaciente"
-                            value="${paciente.nombre}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Apellido paterno:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarApellidoPaternoPaciente"
-                            value="${paciente.apellido_paterno}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Apellido materno:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarApellidoMaternoPaciente"
-                            value="${paciente.apellido_materno || ""}"
-                        >
-
-                        <br><br>
-
-                        <label>Fecha de nacimiento:</label><br>
-
-                        <input
-                            type="date"
-                            id="editarFechaNacimientoPaciente"
-                            value="${paciente.fecha_nacimiento || ""}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Teléfono:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarTelefonoPaciente"
-                            value="${paciente.telefono || ""}"
-                            maxlength="10"
-                        >
-
-                        <br><br>
-
-                        <label>Diagnóstico:</label><br>
-
-                        <input
-                            type="text"
-                            id="editarDiagnosticoPaciente"
-                            value="${paciente.diagnostico || ""}"
-                            required
-                        >
-
-                        <br><br>
-
-                        <label>Estatus:</label><br>
-
-                        <select
-                            id="editarEstatusPaciente"
-                            required
-                        >
-
-                            <option value="Estable">
-                                Estable
-                            </option>
-
-                            <option value="En observación">
-                                En observación
-                            </option>
-
-                            <option value="Crítico">
-                                Crítico
-                            </option>
-
-                            <option value="Alta">
-                                Alta
-                            </option>
-
-                        </select>
-
-                        <br><br>
-
-                        <button type="submit">
-                            Guardar cambios
-                        </button>
-
-                        <button
-                            type="button"
-                            onclick="verPacientes()">
-                            Cancelar
-                        </button>
-
-                    </form>
-
-                `;
-
-
-                document
-                    .getElementById(
-                        "editarEstatusPaciente"
-                    )
-                    .value =
-                    paciente.estatus;
-
-
-                document
-                    .getElementById(
-                        "formEditarPaciente"
-                    )
-                    .addEventListener(
-                        "submit",
-                        async function(event) {
-
-                            event.preventDefault();
-
-
-                            const telefono =
-                                document
-                                .getElementById(
-                                    "editarTelefonoPaciente"
-                                )
-                                .value
-                                .trim();
-
-
-                            if (
-                                telefono &&
-                                !/^\d{10}$/.test(telefono)
-                            ) {
-
-                                alert(
-                                    "El teléfono debe contener exactamente 10 dígitos."
-                                );
-
-                                return;
-
-                            }
-
-
-                            const confirmar = confirm(
-                                "¿Deseas guardar los cambios del paciente?"
-                            );
-
-
-                            if (!confirmar) {
-
-                                return;
-
-                            }
-
-
-                            try {
-
-                                const respuesta =
-                                    await fetch(
-                                        API +
-                                        "/pacientes/" +
-                                        id,
-                                        {
-                                            method: "PUT",
-
-                                            headers:
-                                                encabezados(),
-
-                                            body:
-                                                JSON.stringify({
-
-                                                    nombre:
-                                                        document
-                                                        .getElementById(
-                                                            "editarNombrePaciente"
-                                                        )
-                                                        .value
-                                                        .trim(),
-
-                                                    apellido_paterno:
-                                                        document
-                                                        .getElementById(
-                                                            "editarApellidoPaternoPaciente"
-                                                        )
-                                                        .value
-                                                        .trim(),
-
-                                                    apellido_materno:
-                                                        document
-                                                        .getElementById(
-                                                            "editarApellidoMaternoPaciente"
-                                                        )
-                                                        .value
-                                                        .trim() ||
-                                                        null,
-
-                                                    fecha_nacimiento:
-                                                        document
-                                                        .getElementById(
-                                                            "editarFechaNacimientoPaciente"
-                                                        )
-                                                        .value,
-
-                                                    telefono:
-                                                        telefono ||
-                                                        null,
-
-                                                    diagnostico:
-                                                        document
-                                                        .getElementById(
-                                                            "editarDiagnosticoPaciente"
-                                                        )
-                                                        .value
-                                                        .trim(),
-
-                                                    estatus:
-                                                        document
-                                                        .getElementById(
-                                                            "editarEstatusPaciente"
-                                                        )
-                                                        .value
-
-                                                })
-                                        }
-                                    );
-
-
-                                const datos =
-                                    await respuesta.json();
-
-
-                                if (!respuesta.ok) {
-
-                                    alert(
-                                        datos.detail ||
-                                        "No se pudo modificar el paciente."
-                                    );
-
-                                    return;
-
-                                }
-
-
-                                alert(
-                                    "Paciente modificado correctamente."
-                                );
-
-
-                                verPacientes();
-
-
-                            } catch (error) {
-
-                                console.error(error);
-
-                                alert(
-                                    "No se pudo conectar con el servidor."
-                                );
-
-                            }
-
-                        }
-                    );
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // ELIMINAR PACIENTE
-        // ==========================================
-
-        async function eliminarPaciente(id) {
-
-            const confirmar = confirm(
-                "¿Estás seguro de que deseas eliminar este paciente?"
-            );
-
-
-            if (!confirmar) {
-
-                return;
-
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/pacientes/" + id,
-                    {
-                        method: "DELETE",
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos = await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo eliminar el paciente."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Paciente eliminado correctamente."
-                );
-
-
-                verPacientes();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // ASIGNACIONES
-        // ==========================================
-// ==========================================
-// ASIGNACIONES
-// ==========================================
-
-async function verAsignaciones() {
-
-    try {
-
-        const respuesta = await fetch(
-            API + "/asignaciones/",
-            {
-                headers: encabezados()
-            }
+        hoy.setFullYear(
+            hoy.getFullYear() - 130
         );
 
+        const año = hoy.getFullYear();
 
-        const asignaciones = await respuesta.json();
+        const mes = String(
+            hoy.getMonth() + 1
+        ).padStart(2, "0");
+
+        const dia = String(
+            hoy.getDate()
+        ).padStart(2, "0");
+
+        return `${año}-${mes}-${dia}`;
+
+    }
 
 
-        if (!respuesta.ok) {
+    function fechaValida(fecha) {
 
-            alert(
-                asignaciones.detail ||
-                "No se pudieron consultar las asignaciones."
-            );
-
-            return;
-
+        if (!fecha) {
+            return true;
         }
 
+        const fechaSeleccionada =
+            new Date(fecha + "T00:00:00");
 
-        let html =
-            "<h3>Asignaciones registradas</h3>";
+        const hoy = new Date();
+
+        const fechaMinima =
+            new Date(
+                obtenerFechaMinima() + "T00:00:00"
+            );
+
+        hoy.setHours(0, 0, 0, 0);
+
+        return (
+            fechaSeleccionada <= hoy &&
+            fechaSeleccionada >= fechaMinima
+        );
+
+    }
 
 
-        if (asignaciones.length === 0) {
+    function mensajeFechaInvalida(tipo) {
 
-            html +=
-                "<p>No hay asignaciones registradas.</p>";
+        if (tipo === "nacimiento") {
+
+            alert(
+                "La fecha de nacimiento debe estar entre " +
+                obtenerFechaMinima() +
+                " y " +
+                obtenerFechaActual() +
+                "."
+            );
 
         } else {
 
-            html += "<table border='1'>";
-
-
-            html += `
-                <tr>
-
-                    <th>ID</th>
-
-                    <th>Paciente</th>
-
-                    <th>Personal</th>
-
-                    <th>Fecha de asignación</th>
-
-                    <th>Observaciones</th>
-
-                    <th>Acciones</th>
-
-                </tr>
-            `;
-
-
-            asignaciones.forEach(asignacion => {
-
-                html += `
-                    <tr>
-
-                        <td>
-                            ${asignacion.id}
-                        </td>
-
-                        <td>
-                            Paciente #${asignacion.paciente_id}
-                        </td>
-
-                        <td>
-                            Personal #${asignacion.personal_id}
-                        </td>
-
-                        <td>
-                            ${asignacion.fecha_asignacion}
-                        </td>
-
-                        <td>
-                            ${asignacion.observaciones || "Sin observaciones"}
-                        </td>
-
-                        <td>
-
-                            <button
-                                onclick="verDetalleAsignacion(${asignacion.id})">
-                                Detalles
-                            </button>
-
-                            <button
-                                onclick="editarAsignacion(${asignacion.id})">
-                                Modificar
-                            </button>
-
-                            <button
-                                onclick="eliminarAsignacion(${asignacion.id})">
-                                Eliminar
-                            </button>
-
-                        </td>
-
-                    </tr>
-                `;
-
-            });
-
-
-            html += "</table>";
+            alert(
+                "La fecha debe estar entre " +
+                obtenerFechaMinima() +
+                " y " +
+                obtenerFechaActual() +
+                "."
+            );
 
         }
-
-
-        document.getElementById("contenido").innerHTML =
-            html;
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "No se pudo conectar con el servidor."
-        );
 
     }
 
-}
+
+    /* ==================================================
+       SESIÓN
+    ================================================== */
+
+    function obtenerToken() {
+
+        return localStorage.getItem("access_token");
+
+    }
 
 
-// ==========================================
-// DETALLES DE ASIGNACIÓN
-// ==========================================
+    function cerrarSesion() {
 
-async function verDetalleAsignacion(id) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("rol");
+        localStorage.removeItem("personal_id");
 
-    try {
+        window.location.href = "/";
 
-        // Obtener la asignación
-        const respuestaAsignacion = await fetch(
-            API + "/asignaciones/" + id,
-            {
-                headers: encabezados()
-            }
-        );
+    }
 
-        const asignacion = await respuestaAsignacion.json();
 
-        if (!respuestaAsignacion.ok) {
-            alert(
-                asignacion.detail ||
-                "No se pudo consultar la asignación."
-            );
-            return;
+    /* ==================================================
+       VERIFICAR SESIÓN
+    ================================================== */
+
+    const token = obtenerToken();
+
+    const rol = localStorage.getItem("rol");
+
+    if (!token || rol !== "Admin") {
+
+        window.location.href = "/";
+
+    }
+
+
+    const usuarioGuardado =
+        localStorage.getItem("usuario");
+
+    if (usuarioGuardado) {
+
+        document.getElementById(
+            "nombreUsuario"
+        ).textContent = usuarioGuardado;
+
+    }
+
+
+    /* ==================================================
+       CAMBIAR SECCIÓN
+    ================================================== */
+
+    function mostrarSeccion(seccion, boton) {
+
+        const inicio =
+            document.getElementById("inicio");
+
+        const contenido =
+            document.getElementById("contenido");
+
+
+        document.querySelectorAll(
+            ".menu button"
+        ).forEach(function(btn) {
+
+            btn.classList.remove("activo");
+
+        });
+
+
+        if (boton) {
+
+            boton.classList.add("activo");
+
         }
 
 
-        // Obtener información del paciente
-        const respuestaPaciente = await fetch(
-            API + "/pacientes/" + asignacion.paciente_id,
-            {
-                headers: encabezados()
-            }
-        );
+        if (seccion === "inicio") {
 
-        const paciente = await respuestaPaciente.json();
+            inicio.style.display = "block";
 
-        if (!respuestaPaciente.ok) {
-            alert(
-                paciente.detail ||
-                "No se pudo consultar el paciente."
-            );
+            contenido.style.display = "none";
+
             return;
+
         }
 
 
-        // Obtener información del personal
-        const respuestaPersonal = await fetch(
-            API + "/personal/" + asignacion.personal_id,
-            {
-                headers: encabezados()
-            }
-        );
+        inicio.style.display = "none";
 
-        const personal = await respuestaPersonal.json();
+        contenido.style.display = "block";
 
-        if (!respuestaPersonal.ok) {
-            alert(
-                personal.detail ||
-                "No se pudo consultar el personal."
+
+        if (seccion === "personal") {
+
+            verPersonal();
+
+        }
+
+        else if (seccion === "usuarios") {
+
+            verUsuarios();
+
+        }
+
+        else if (seccion === "pacientes") {
+
+            verPacientes();
+
+        }
+
+        else if (seccion === "asignaciones") {
+
+            verAsignaciones();
+
+        }
+
+    }
+
+
+    /* ==================================================
+       PERSONAL
+    ================================================== */
+
+    async function verPersonal() {
+
+        const contenido =
+            document.getElementById("contenido");
+
+        try {
+
+            const respuesta = await fetch(
+                `${API}/personal/`,
+                {
+                    headers: {
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+                    }
+                }
             );
+
+
+            const personal =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    personal.detail ||
+                    "No se pudo obtener el personal."
+                );
+
+                return;
+
+            }
+
+
+            contenido.innerHTML = `
+
+                <h3>Personal</h3>
+
+                <p>
+                    Administración de médicos y enfermeros.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="btn-nuevo"
+                    onclick="mostrarFormularioPersonal()"
+                >
+                    + Nuevo personal
+                </button>
+
+
+                <div
+                    id="formularioPersonal"
+                    class="formulario"
+                    style="display:none;"
+                >
+
+                    <h4 id="tituloFormularioPersonal">
+                        Registrar personal
+                    </h4>
+
+
+                    <form
+                        id="personalForm"
+                        onsubmit="guardarPersonal(event)"
+                    >
+
+                        <input
+                            type="hidden"
+                            id="personal_id"
+                        >
+
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label>
+                                    Nombre *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="personal_nombre"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Apellido paterno *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="personal_apellido_paterno"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Apellido materno
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="personal_apellido_materno"
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Fecha de nacimiento *
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="personal_fecha_nacimiento"
+                                    min="${obtenerFechaMinima()}"
+                                    max="${obtenerFechaActual()}"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Tipo *
+                                </label>
+
+                                <select
+                                    id="personal_tipo"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Seleccionar
+                                    </option>
+
+                                    <option value="Doctor">
+                                        Doctor
+                                    </option>
+
+                                    <option value="Enfermero">
+                                        Enfermero
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Especialidad
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="personal_especialidad"
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Teléfono
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="personal_telefono"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-botones">
+
+                            <button
+                                type="submit"
+                                class="btn-guardar"
+                            >
+                                Guardar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-cancelar"
+                                onclick="cancelarFormularioPersonal()"
+                            >
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Fecha nacimiento</th>
+                                <th>Tipo</th>
+                                <th>Especialidad</th>
+                                <th>Teléfono</th>
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            ${
+                                personal.map(p => `
+
+                                    <tr>
+
+                                        <td>${p.id}</td>
+
+                                        <td>
+                                            ${p.nombre}
+                                        </td>
+
+                                        <td>
+                                            ${p.apellido_paterno}
+                                            ${p.apellido_materno || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.fecha_nacimiento || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.tipo}
+                                        </td>
+
+                                        <td>
+                                            ${p.especialidad || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.telefono || ""}
+                                        </td>
+
+                                        <td>
+
+                                            <div class="acciones">
+
+                                                <button
+                                                    class="btn-editar"
+                                                    onclick='editarPersonal(${JSON.stringify(p)})'
+                                                >
+                                                    Editar
+                                                </button>
+
+                                                <button
+                                                    class="btn-eliminar"
+                                                    onclick="eliminarPersonal(${p.id})"
+                                                >
+                                                    Eliminar
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `).join("")
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    function mostrarFormularioPersonal() {
+
+        document.getElementById(
+            "formularioPersonal"
+        ).style.display = "block";
+
+        document.getElementById(
+            "tituloFormularioPersonal"
+        ).textContent = "Registrar personal";
+
+        document.getElementById(
+            "personalForm"
+        ).reset();
+
+        document.getElementById(
+            "personal_id"
+        ).value = "";
+
+    }
+
+
+    function cancelarFormularioPersonal() {
+
+        document.getElementById(
+            "formularioPersonal"
+        ).style.display = "none";
+
+    }
+
+
+    function editarPersonal(p) {
+
+        mostrarFormularioPersonal();
+
+        document.getElementById(
+            "tituloFormularioPersonal"
+        ).textContent = "Modificar personal";
+
+        document.getElementById(
+            "personal_id"
+        ).value = p.id;
+
+        document.getElementById(
+            "personal_nombre"
+        ).value = p.nombre || "";
+
+        document.getElementById(
+            "personal_apellido_paterno"
+        ).value = p.apellido_paterno || "";
+
+        document.getElementById(
+            "personal_apellido_materno"
+        ).value = p.apellido_materno || "";
+
+        document.getElementById(
+            "personal_fecha_nacimiento"
+        ).value = p.fecha_nacimiento || "";
+
+        document.getElementById(
+            "personal_tipo"
+        ).value = p.tipo || "";
+
+        document.getElementById(
+            "personal_especialidad"
+        ).value = p.especialidad || "";
+
+        document.getElementById(
+            "personal_telefono"
+        ).value = p.telefono || "";
+
+    }
+
+
+    async function guardarPersonal(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "personal_id"
+            ).value;
+
+
+        const datos = {
+
+            nombre:
+                document.getElementById(
+                    "personal_nombre"
+                ).value.trim(),
+
+            apellido_paterno:
+                document.getElementById(
+                    "personal_apellido_paterno"
+                ).value.trim(),
+
+            apellido_materno:
+                document.getElementById(
+                    "personal_apellido_materno"
+                ).value.trim() || null,
+
+            fecha_nacimiento:
+                document.getElementById(
+                    "personal_fecha_nacimiento"
+                ).value,
+
+            tipo:
+                document.getElementById(
+                    "personal_tipo"
+                ).value,
+
+            especialidad:
+                document.getElementById(
+                    "personal_especialidad"
+                ).value.trim() || null,
+
+            telefono:
+                document.getElementById(
+                    "personal_telefono"
+                ).value.trim() || null
+
+        };
+
+
+        if (!fechaValida(datos.fecha_nacimiento)) {
+
+            mensajeFechaInvalida("nacimiento");
+
             return;
+
         }
 
 
-        // Mostrar los detalles
-        document.getElementById("contenido").innerHTML = `
+        const confirmar = confirm(
 
-            <h3>Detalles de la asignación</h3>
+            id
+                ? "¿Deseas modificar este registro?"
+                : "¿Deseas registrar este personal?"
 
-            <hr>
-
-            <h4>Asignación</h4>
-
-            <p>
-                <strong>ID:</strong>
-                ${asignacion.id}
-            </p>
-
-            <p>
-                <strong>Fecha de asignación:</strong>
-                ${asignacion.fecha_asignacion}
-            </p>
-
-            <p>
-                <strong>Observaciones:</strong>
-                ${asignacion.observaciones || "Sin observaciones"}
-            </p>
+        );
 
 
-            <h4>Paciente</h4>
-
-            <p>
-                <strong>Nombre:</strong>
-                ${paciente.nombre}
-                ${paciente.apellido_paterno}
-                ${paciente.apellido_materno || ""}
-            </p>
-
-            <p>
-                <strong>Fecha de nacimiento:</strong>
-                ${paciente.fecha_nacimiento || "No registrada"}
-            </p>
-
-            <p>
-                <strong>Diagnóstico:</strong>
-                ${paciente.diagnostico || "No registrado"}
-            </p>
-
-            <p>
-                <strong>Estatus:</strong>
-                ${paciente.estatus}
-            </p>
+        if (!confirmar) return;
 
 
-            <h4>Personal asignado</h4>
+        try {
 
-            <p>
-                <strong>Nombre:</strong>
-                ${personal.nombre}
-                ${personal.apellido_paterno}
-                ${personal.apellido_materno || ""}
-            </p>
+            const respuesta = await fetch(
 
-            <p>
-                <strong>Tipo:</strong>
-                ${personal.tipo}
-            </p>
+                id
+                    ? `${API}/personal/${id}`
+                    : `${API}/personal/`,
 
-            <p>
-                <strong>Especialidad:</strong>
-                ${personal.especialidad || "No especificada"}
-            </p>
+                {
 
-            <br>
+                    method:
+                        id ? "PUT" : "POST",
 
-            <button onclick="verAsignaciones()">
-                Regresar a asignaciones
-            </button>
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    },
+
+                    body:
+                        JSON.stringify(datos)
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo guardar el personal."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+
+                id
+                    ? "Personal modificado correctamente."
+                    : "Personal registrado correctamente."
+
+            );
+
+
+            cancelarFormularioPersonal();
+
+            verPersonal();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    async function eliminarPersonal(id) {
+
+        if (!confirm(
+            "¿Deseas eliminar este registro?"
+        )) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/personal/${id}`,
+
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo eliminar."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Personal eliminado correctamente."
+            );
+
+            verPersonal();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    /* ==================================================
+       USUARIOS
+    ================================================== */
+
+    async function verUsuarios() {
+
+        const contenido =
+            document.getElementById("contenido");
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/usuarios/`,
+
+                {
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const usuarios =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    usuarios.detail ||
+                    "No se pudieron obtener los usuarios."
+                );
+
+                return;
+
+            }
+
+
+            contenido.innerHTML = `
+
+                <h3>Usuarios</h3>
+
+                <p>
+                    Administración de cuentas de acceso.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="btn-nuevo"
+                    onclick="mostrarFormularioUsuario()"
+                >
+                    + Nuevo usuario
+                </button>
+
+
+                <div
+                    id="formularioUsuario"
+                    class="formulario"
+                    style="display:none;"
+                >
+
+                    <h4 id="tituloFormularioUsuario">
+                        Registrar usuario
+                    </h4>
+
+
+                    <form
+                        id="usuarioForm"
+                        onsubmit="guardarUsuario(event)"
+                    >
+
+                        <input
+                            type="hidden"
+                            id="usuario_id"
+                        >
+
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label>
+                                    Usuario *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="usuario_usuario"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Contraseña *
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="usuario_password"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Rol *
+                                </label>
+
+                                <select
+                                    id="usuario_rol"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Seleccionar
+                                    </option>
+
+                                    <option value="Admin">
+                                        Admin
+                                    </option>
+
+                                    <option value="Doctor">
+                                        Doctor
+                                    </option>
+
+                                    <option value="Enfermero">
+                                        Enfermero
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    ID del personal
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="usuario_personal_id"
+                                    min="1"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-botones">
+
+                            <button
+                                type="submit"
+                                class="btn-guardar"
+                            >
+                                Guardar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-cancelar"
+                                onclick="cancelarFormularioUsuario()"
+                            >
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Contraseña</th>
+                                <th>Rol</th>
+                                <th>ID Personal</th>
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            ${
+                                usuarios.map(u => `
+
+                                    <tr>
+
+                                        <td>${u.id}</td>
+
+                                        <td>${u.usuario}</td>
+
+                                        <td>********</td>
+
+                                        <td>${u.rol}</td>
+
+                                        <td>${u.personal_id || ""}</td>
+
+                                        <td>
+
+                                            <div class="acciones">
+
+                                                <button
+                                                    class="btn-editar"
+                                                    onclick='editarUsuario(${JSON.stringify(u)})'
+                                                >
+                                                    Editar
+                                                </button>
+
+                                                <button
+                                                    class="btn-eliminar"
+                                                    onclick="eliminarUsuario(${u.id})"
+                                                >
+                                                    Eliminar
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `).join("")
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    function mostrarFormularioUsuario() {
+
+        document.getElementById(
+            "formularioUsuario"
+        ).style.display = "block";
+
+        document.getElementById(
+            "tituloFormularioUsuario"
+        ).textContent = "Registrar usuario";
+
+        document.getElementById(
+            "usuarioForm"
+        ).reset();
+
+        document.getElementById(
+            "usuario_id"
+        ).value = "";
+
+    }
+
+
+    function cancelarFormularioUsuario() {
+
+        document.getElementById(
+            "formularioUsuario"
+        ).style.display = "none";
+
+    }
+
+
+    function editarUsuario(u) {
+
+        mostrarFormularioUsuario();
+
+        document.getElementById(
+            "tituloFormularioUsuario"
+        ).textContent = "Modificar usuario";
+
+        document.getElementById(
+            "usuario_id"
+        ).value = u.id;
+
+        document.getElementById(
+            "usuario_usuario"
+        ).value = u.usuario || "";
+
+        document.getElementById(
+            "usuario_password"
+        ).value = "";
+
+        document.getElementById(
+            "usuario_rol"
+        ).value = u.rol || "";
+
+        document.getElementById(
+            "usuario_personal_id"
+        ).value = u.personal_id || "";
+
+    }
+
+
+    async function guardarUsuario(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "usuario_id"
+            ).value;
+
+
+        const datos = {
+
+            usuario:
+                document.getElementById(
+                    "usuario_usuario"
+                ).value.trim(),
+
+            password:
+                document.getElementById(
+                    "usuario_password"
+                ).value,
+
+            rol:
+                document.getElementById(
+                    "usuario_rol"
+                ).value,
+
+            personal_id:
+                Number(
+                    document.getElementById(
+                        "usuario_personal_id"
+                    ).value
+                ) || null
+
+        };
+
+
+        if (!datos.password) {
+
+            alert(
+                "Ingresa una contraseña."
+            );
+
+            return;
+
+        }
+
+
+        const confirmar = confirm(
+
+            id
+                ? "¿Deseas modificar este usuario?"
+                : "¿Deseas registrar este usuario?"
+
+        );
+
+
+        if (!confirmar) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                id
+                    ? `${API}/usuarios/${id}`
+                    : `${API}/usuarios/`,
+
+                {
+
+                    method:
+                        id ? "PUT" : "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    },
+
+                    body:
+                        JSON.stringify(datos)
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo guardar el usuario."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+
+                id
+                    ? "Usuario modificado correctamente."
+                    : "Usuario registrado correctamente."
+
+            );
+
+
+            cancelarFormularioUsuario();
+
+            verUsuarios();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    async function eliminarUsuario(id) {
+
+        if (!confirm(
+            "¿Deseas eliminar este usuario?"
+        )) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/usuarios/${id}`,
+
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo eliminar."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Usuario eliminado correctamente."
+            );
+
+            verUsuarios();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    /* ==================================================
+       PACIENTES
+    ================================================== */
+
+    async function verPacientes() {
+
+        const contenido =
+            document.getElementById("contenido");
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/pacientes/`,
+
+                {
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const pacientes =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    pacientes.detail ||
+                    "No se pudieron obtener los pacientes."
+                );
+
+                return;
+
+            }
+
+
+            contenido.innerHTML = `
+
+                <h3>Pacientes</h3>
+
+                <p>
+                    Administración de pacientes.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="btn-nuevo"
+                    onclick="mostrarFormularioPaciente()"
+                >
+                    + Nuevo paciente
+                </button>
+
+
+                <div
+                    id="formularioPaciente"
+                    class="formulario"
+                    style="display:none;"
+                >
+
+                    <h4 id="tituloFormularioPaciente">
+                        Registrar paciente
+                    </h4>
+
+
+                    <form
+                        id="pacienteForm"
+                        onsubmit="guardarPaciente(event)"
+                    >
+
+                        <input
+                            type="hidden"
+                            id="paciente_id"
+                        >
+
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label>
+                                    Nombre *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="paciente_nombre"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Apellido paterno *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="paciente_apellido_paterno"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Apellido materno
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="paciente_apellido_materno"
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Fecha de nacimiento *
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="paciente_fecha_nacimiento"
+                                    min="${obtenerFechaMinima()}"
+                                    max="${obtenerFechaActual()}"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Teléfono
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="paciente_telefono"
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Estatus *
+                                </label>
+
+                                <select
+                                    id="paciente_estatus"
+                                    required
+                                >
+
+                                    <option value="Estable">
+                                        Estable
+                                    </option>
+
+                                    <option value="Delicado">
+                                        Delicado
+                                    </option>
+
+                                    <option value="Grave">
+                                        Grave
+                                    </option>
+
+                                    <option value="Alta">
+                                        Alta
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="campo campo-completo">
+
+                                <label>
+                                    Observaciones
+                                </label>
+
+                                <textarea
+                                    id="paciente_observaciones"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-botones">
+
+                            <button
+                                type="submit"
+                                class="btn-guardar"
+                            >
+                                Guardar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-cancelar"
+                                onclick="cancelarFormularioPaciente()"
+                            >
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Fecha nacimiento</th>
+                                <th>Teléfono</th>
+                                <th>Estatus</th>
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            ${
+                                pacientes.map(p => `
+
+                                    <tr>
+
+                                        <td>${p.id}</td>
+
+                                        <td>
+                                            ${p.nombre}
+                                        </td>
+
+                                        <td>
+                                            ${p.apellido_paterno}
+                                            ${p.apellido_materno || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.fecha_nacimiento || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.telefono || ""}
+                                        </td>
+
+                                        <td>
+                                            ${p.estatus || ""}
+                                        </td>
+
+                                        <td>
+
+                                            <div class="acciones">
+
+                                                <button
+                                                    class="btn-editar"
+                                                    onclick='editarPaciente(${JSON.stringify(p)})'
+                                                >
+                                                    Editar
+                                                </button>
+
+                                                <button
+                                                    class="btn-eliminar"
+                                                    onclick="eliminarPaciente(${p.id})"
+                                                >
+                                                    Eliminar
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `).join("")
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    function mostrarFormularioPaciente() {
+
+        document.getElementById(
+            "formularioPaciente"
+        ).style.display = "block";
+
+        document.getElementById(
+            "tituloFormularioPaciente"
+        ).textContent = "Registrar paciente";
+
+        document.getElementById(
+            "pacienteForm"
+        ).reset();
+
+        document.getElementById(
+            "paciente_id"
+        ).value = "";
+
+    }
+
+
+    function cancelarFormularioPaciente() {
+
+        document.getElementById(
+            "formularioPaciente"
+        ).style.display = "none";
+
+    }
+
+
+    function editarPaciente(p) {
+
+        mostrarFormularioPaciente();
+
+        document.getElementById(
+            "tituloFormularioPaciente"
+        ).textContent = "Modificar paciente";
+
+        document.getElementById(
+            "paciente_id"
+        ).value = p.id;
+
+        document.getElementById(
+            "paciente_nombre"
+        ).value = p.nombre || "";
+
+        document.getElementById(
+            "paciente_apellido_paterno"
+        ).value = p.apellido_paterno || "";
+
+        document.getElementById(
+            "paciente_apellido_materno"
+        ).value = p.apellido_materno || "";
+
+        document.getElementById(
+            "paciente_fecha_nacimiento"
+        ).value = p.fecha_nacimiento || "";
+
+        document.getElementById(
+            "paciente_telefono"
+        ).value = p.telefono || "";
+
+        document.getElementById(
+            "paciente_estatus"
+        ).value = p.estatus || "Estable";
+
+        document.getElementById(
+            "paciente_observaciones"
+        ).value = p.observaciones || "";
+
+    }
+
+
+    async function guardarPaciente(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "paciente_id"
+            ).value;
+
+
+        const datos = {
+
+            nombre:
+                document.getElementById(
+                    "paciente_nombre"
+                ).value.trim(),
+
+            apellido_paterno:
+                document.getElementById(
+                    "paciente_apellido_paterno"
+                ).value.trim(),
+
+            apellido_materno:
+                document.getElementById(
+                    "paciente_apellido_materno"
+                ).value.trim() || null,
+
+            fecha_nacimiento:
+                document.getElementById(
+                    "paciente_fecha_nacimiento"
+                ).value,
+
+            telefono:
+                document.getElementById(
+                    "paciente_telefono"
+                ).value.trim() || null,
+
+            estatus:
+                document.getElementById(
+                    "paciente_estatus"
+                ).value,
+
+            observaciones:
+                document.getElementById(
+                    "paciente_observaciones"
+                ).value.trim() || null
+
+        };
+
+
+        if (!fechaValida(datos.fecha_nacimiento)) {
+
+            mensajeFechaInvalida("nacimiento");
+
+            return;
+
+        }
+
+
+        const confirmar = confirm(
+
+            id
+                ? "¿Deseas modificar este paciente?"
+                : "¿Deseas registrar este paciente?"
+
+        );
+
+
+        if (!confirmar) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                id
+                    ? `${API}/pacientes/${id}`
+                    : `${API}/pacientes/`,
+
+                {
+
+                    method:
+                        id ? "PUT" : "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    },
+
+                    body:
+                        JSON.stringify(datos)
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo guardar el paciente."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+
+                id
+                    ? "Paciente modificado correctamente."
+                    : "Paciente registrado correctamente."
+
+            );
+
+
+            cancelarFormularioPaciente();
+
+            verPacientes();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    async function eliminarPaciente(id) {
+
+        if (!confirm(
+            "¿Deseas eliminar este paciente?"
+        )) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/pacientes/${id}`,
+
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo eliminar."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Paciente eliminado correctamente."
+            );
+
+            verPacientes();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    /* ==================================================
+       ASIGNACIONES
+    ================================================== */
+
+    async function verAsignaciones() {
+
+        const contenido =
+            document.getElementById("contenido");
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/asignaciones/`,
+
+                {
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const asignaciones =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    asignaciones.detail ||
+                    "No se pudieron obtener las asignaciones."
+                );
+
+                return;
+
+            }
+
+
+            contenido.innerHTML = `
+
+                <h3>Asignaciones</h3>
+
+                <p>
+                    Administración de pacientes asignados al personal.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="btn-nuevo"
+                    onclick="mostrarFormularioAsignacion()"
+                >
+                    + Nueva asignación
+                </button>
+
+
+                <div
+                    id="formularioAsignacion"
+                    class="formulario"
+                    style="display:none;"
+                >
+
+                    <h4 id="tituloFormularioAsignacion">
+                        Registrar asignación
+                    </h4>
+
+
+                    <form
+                        id="asignacionForm"
+                        onsubmit="guardarAsignacion(event)"
+                    >
+
+                        <input
+                            type="hidden"
+                            id="asignacion_id"
+                        >
+
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label>
+                                    ID del paciente *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="asignacion_paciente_id"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    ID del personal *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="asignacion_personal_id"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label>
+                                    Fecha *
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="asignacion_fecha"
+                                    min="${obtenerFechaMinima()}"
+                                    max="${obtenerFechaActual()}"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo campo-completo">
+
+                                <label>
+                                    Observaciones
+                                </label>
+
+                                <textarea
+                                    id="asignacion_observaciones"
+                                    placeholder="Escribe las observaciones de la asignación..."
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-botones">
+
+                            <button
+                                type="submit"
+                                class="btn-guardar"
+                            >
+                                Guardar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-cancelar"
+                                onclick="cancelarFormularioAsignacion()"
+                            >
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div
+                    id="detallesAsignacion"
+                    class="detalles-contenedor"
+                    style="display:none;"
+                ></div>
+
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>ID Paciente</th>
+                                <th>ID Personal</th>
+                                <th>Fecha</th>
+                                <th>Observaciones</th>
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            ${
+                                asignaciones.map(a => `
+
+                                    <tr>
+
+                                        <td>
+                                            ${a.id}
+                                        </td>
+
+                                        <td>
+                                            ${a.paciente_id}
+                                        </td>
+
+                                        <td>
+                                            ${a.personal_id}
+                                        </td>
+
+                                        <td>
+                                            ${a.fecha_asignacion || ""}
+                                        </td>
+
+                                        <td>
+                                            ${a.observaciones || ""}
+                                        </td>
+
+                                        <td>
+
+                                            <div class="acciones">
+
+                                                <button
+                                                    class="btn-detalles"
+                                                    onclick='mostrarDetallesAsignacion(${JSON.stringify(a)})'
+                                                >
+                                                    Detalles
+                                                </button>
+
+                                                <button
+                                                    class="btn-editar"
+                                                    onclick='editarAsignacion(${JSON.stringify(a)})'
+                                                >
+                                                    Editar
+                                                </button>
+
+                                                <button
+                                                    class="btn-eliminar"
+                                                    onclick="eliminarAsignacion(${a.id})"
+                                                >
+                                                    Eliminar
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                `).join("")
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    function mostrarFormularioAsignacion() {
+
+        document.getElementById(
+            "formularioAsignacion"
+        ).style.display = "block";
+
+        document.getElementById(
+            "tituloFormularioAsignacion"
+        ).textContent = "Registrar asignación";
+
+        document.getElementById(
+            "asignacionForm"
+        ).reset();
+
+        document.getElementById(
+            "asignacion_id"
+        ).value = "";
+
+    }
+
+
+    function cancelarFormularioAsignacion() {
+
+        const formulario =
+            document.getElementById(
+                "formularioAsignacion"
+            );
+
+        if (!formulario) return;
+
+        formulario.style.display = "none";
+
+    }
+
+
+    function editarAsignacion(a) {
+
+        mostrarFormularioAsignacion();
+
+
+        document.getElementById(
+            "tituloFormularioAsignacion"
+        ).textContent =
+            "Modificar asignación";
+
+
+        document.getElementById(
+            "asignacion_id"
+        ).value = a.id;
+
+
+        document.getElementById(
+            "asignacion_paciente_id"
+        ).value =
+            a.paciente_id || "";
+
+
+        document.getElementById(
+            "asignacion_personal_id"
+        ).value =
+            a.personal_id || "";
+
+
+        document.getElementById(
+            "asignacion_fecha"
+        ).value =
+            a.fecha_asignacion || "";
+
+
+        document.getElementById(
+            "asignacion_observaciones"
+        ).value =
+            a.observaciones || "";
+
+    }
+
+
+    async function guardarAsignacion(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "asignacion_id"
+            ).value;
+
+
+        const pacienteId =
+            Number(
+                document.getElementById(
+                    "asignacion_paciente_id"
+                ).value
+            );
+
+
+        const personalId =
+            Number(
+                document.getElementById(
+                    "asignacion_personal_id"
+                ).value
+            );
+
+
+        const fecha =
+            document.getElementById(
+                "asignacion_fecha"
+            ).value;
+
+
+        const observaciones =
+            document.getElementById(
+                "asignacion_observaciones"
+            ).value.trim();
+
+
+        if (!pacienteId || pacienteId <= 0) {
+
+            alert(
+                "Ingresa un ID de paciente válido."
+            );
+
+            return;
+
+        }
+
+
+        if (!personalId || personalId <= 0) {
+
+            alert(
+                "Ingresa un ID de personal válido."
+            );
+
+            return;
+
+        }
+
+
+        if (!fecha) {
+
+            alert(
+                "Selecciona una fecha."
+            );
+
+            return;
+
+        }
+
+
+        if (!fechaValida(fecha)) {
+
+            mensajeFechaInvalida("asignacion");
+
+            return;
+
+        }
+
+
+        const datos = {
+
+            paciente_id:
+                pacienteId,
+
+            personal_id:
+                personalId,
+
+            fecha_asignacion:
+                fecha,
+
+            observaciones:
+                observaciones || null
+
+        };
+
+
+        const confirmar = confirm(
+
+            id
+                ? "¿Deseas modificar esta asignación?"
+                : "¿Deseas registrar esta asignación?"
+
+        );
+
+
+        if (!confirmar) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                id
+                    ? `${API}/asignaciones/${id}`
+                    : `${API}/asignaciones/`,
+
+                {
+
+                    method:
+                        id ? "PUT" : "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    },
+
+                    body:
+                        JSON.stringify(datos)
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                if (respuesta.status === 422) {
+
+                    alert(
+                        "El servidor rechazó los datos enviados.\n\n" +
+                        JSON.stringify(
+                            resultado,
+                            null,
+                            2
+                        )
+                    );
+
+                } else {
+
+                    alert(
+                        resultado.detail ||
+                        "No se pudo guardar la asignación."
+                    );
+
+                }
+
+                return;
+
+            }
+
+
+            alert(
+
+                id
+                    ? "Asignación modificada correctamente."
+                    : "Asignación registrada correctamente."
+
+            );
+
+
+            cancelarFormularioAsignacion();
+
+            verAsignaciones();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
+
+        }
+
+    }
+
+
+    function mostrarDetallesAsignacion(a) {
+
+        const contenedor =
+            document.getElementById(
+                "detallesAsignacion"
+            );
+
+
+        if (!contenedor) return;
+
+
+        /*
+         * Si el backend solamente devuelve los IDs,
+         * primero mostramos la información disponible.
+         * Después intentamos obtener los nombres.
+         */
+
+        contenedor.style.display = "block";
+
+
+        contenedor.innerHTML = `
+
+            <div class="detalles-asignacion">
+
+                <h4 class="detalles-titulo">
+                    Detalles de la asignación
+                </h4>
+
+
+                <div class="detalles-grid">
+
+                    <div class="detalle-item">
+
+                        <strong>
+                            Paciente:
+                        </strong>
+
+                        <span id="detallePacienteNombre">
+                            Consultando...
+                        </span>
+
+                    </div>
+
+
+                    <div class="detalle-item">
+
+                        <strong>
+                            Personal:
+                        </strong>
+
+                        <span id="detallePersonalNombre">
+                            Consultando...
+                        </span>
+
+                    </div>
+
+
+                    <div class="detalle-item">
+
+                        <strong>
+                            Fecha:
+                        </strong>
+
+                        ${a.fecha_asignacion || ""}
+
+                    </div>
+
+
+                    <div class="detalle-item">
+
+                        <strong>
+                            Observaciones:
+                        </strong>
+
+                        ${a.observaciones || "Sin observaciones"}
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-cerrar-detalles"
+                    onclick="cerrarDetallesAsignacion()"
+                >
+                    Cerrar detalles
+                </button>
+
+            </div>
 
         `;
 
-    } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "No se pudo obtener el detalle de la asignación."
+        obtenerNombresAsignacion(
+            a.paciente_id,
+            a.personal_id
         );
+
     }
-}
-        // ==========================================
-        // FORMULARIO ASIGNACIÓN
-        // ==========================================
-
-        function mostrarFormularioAsignacion() {
-
-            document.getElementById("contenido").innerHTML = `
-
-                <h3>Crear asignación</h3>
-
-                <form id="formAsignacion">
-
-                    <label>ID del paciente:</label><br>
-
-                    <input
-                        type="number"
-                        id="pacienteId"
-                        min="1"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>ID del personal:</label><br>
-
-                    <input
-                        type="number"
-                        id="personalId"
-                        min="1"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Fecha de asignación:</label><br>
-
-                    <input
-                        type="date"
-                        id="fechaAsignacion"
-                        required
-                    >
-
-                    <br><br>
-
-                    <label>Observaciones:</label><br>
-
-                    <textarea
-                        id="observacionesAsignacion">
-                    </textarea>
-
-                    <br><br>
-
-                    <button type="submit">
-                        Crear asignación
-                    </button>
-
-                </form>
-
-            `;
 
 
-            document
-                .getElementById("formAsignacion")
-                .addEventListener(
-                    "submit",
-                    guardarAsignacion
-                );
+    async function obtenerNombresAsignacion(
+        pacienteId,
+        personalId
+    ) {
 
-        }
+        const pacienteNombre =
+            document.getElementById(
+                "detallePacienteNombre"
+            );
 
-
-        // ==========================================
-        // GUARDAR ASIGNACIÓN
-        // ==========================================
-
-        async function guardarAsignacion(event) {
-
-            event.preventDefault();
-
-
-            const paciente_id =
-                Number(
-                    document.getElementById(
-                        "pacienteId"
-                    ).value
-                );
-
-
-            const personal_id =
-                Number(
-                    document.getElementById(
-                        "personalId"
-                    ).value
-                );
-
-
-            const fecha_asignacion =
-                document.getElementById(
-                    "fechaAsignacion"
-                ).value;
-
-
-            const observaciones =
-                document.getElementById(
-                    "observacionesAsignacion"
-                ).value.trim();
-
-
-            if (
-                paciente_id <= 0 ||
-                personal_id <= 0
-            ) {
-
-                alert(
-                    "Los IDs deben ser mayores que cero."
-                );
-
-                return;
-
-            }
-
-
-            if (!fecha_asignacion) {
-
-                alert(
-                    "Selecciona la fecha de asignación."
-                );
-
-                return;
-
-            }
-
-
-            const confirmar = confirm(
-                "¿Deseas crear esta asignación?"
+        const personalNombre =
+            document.getElementById(
+                "detallePersonalNombre"
             );
 
 
-            if (!confirmar) {
+        try {
 
-                return;
+            const [respuestaPaciente, respuestaPersonal] =
+                await Promise.all([
 
-            }
-
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/asignaciones/",
-                    {
-                        method: "POST",
-
-                        headers: encabezados(),
-
-                        body: JSON.stringify({
-
-                            paciente_id,
-
-                            personal_id,
-
-                            fecha_asignacion,
-
-                            observaciones:
-                                observaciones || null
-
-                        })
-                    }
-                );
-
-
-                const datos =
-                    await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo crear la asignación."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Asignación creada correctamente."
-                );
-
-
-                verAsignaciones();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // MODIFICAR ASIGNACIÓN
-        // ==========================================
-
-        async function editarAsignacion(id) {
-
-            try {
-
-                const respuesta = await fetch(
-                    API + "/asignaciones/" + id,
-                    {
-                        headers: encabezados()
-                    }
-                );
-
-
-                const asignacion =
-                    await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        asignacion.detail ||
-                        "No se pudo consultar la asignación."
-                    );
-
-                    return;
-
-                }
-
-
-                const paciente_id = prompt(
-                    "ID del paciente:",
-                    asignacion.paciente_id
-                );
-
-
-                if (paciente_id === null) {
-
-                    return;
-
-                }
-
-
-                const personal_id = prompt(
-                    "ID del personal:",
-                    asignacion.personal_id
-                );
-
-
-                if (personal_id === null) {
-
-                    return;
-
-                }
-
-
-                const fecha = prompt(
-                    "Fecha de asignación (AAAA-MM-DD):",
-                    asignacion.fecha_asignacion
-                );
-
-
-                if (fecha === null) {
-
-                    return;
-
-                }
-
-
-                const observaciones = prompt(
-                    "Observaciones:",
-                    asignacion.observaciones || ""
-                );
-
-
-                if (observaciones === null) {
-
-                    return;
-
-                }
-
-
-                const confirmar = confirm(
-                    "¿Deseas guardar los cambios?"
-                );
-
-
-                if (!confirmar) {
-
-                    return;
-
-                }
-
-
-                const respuestaUpdate =
-                    await fetch(
-                        API + "/asignaciones/" + id,
+                    fetch(
+                        `${API}/pacientes/${pacienteId}`,
                         {
-                            method: "PUT",
-
-                            headers: encabezados(),
-
-                            body: JSON.stringify({
-
-                                paciente_id:
-                                    Number(paciente_id),
-
-                                personal_id:
-                                    Number(personal_id),
-
-                                fecha_asignacion:
-                                    fecha,
-
-                                observaciones:
-                                    observaciones || null
-
-                            })
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${obtenerToken()}`
+                            }
                         }
-                    );
+                    ),
+
+                    fetch(
+                        `${API}/personal/${personalId}`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${obtenerToken()}`
+                            }
+                        }
+                    )
+
+                ]);
 
 
-                const datos =
-                    await respuestaUpdate.json();
+            const paciente =
+                await respuestaPaciente.json();
+
+            const personal =
+                await respuestaPersonal.json();
 
 
-                if (!respuestaUpdate.ok) {
+            if (respuestaPaciente.ok) {
 
-                    alert(
-                        datos.detail ||
-                        "No se pudo modificar la asignación."
-                    );
+                if (pacienteNombre) {
 
-                    return;
+                    pacienteNombre.textContent =
+                        `${paciente.nombre || ""} ` +
+                        `${paciente.apellido_paterno || ""} ` +
+                        `${paciente.apellido_materno || ""}`.trim();
 
                 }
 
+            } else {
 
-                alert(
-                    "Asignación modificada correctamente."
-                );
+                if (pacienteNombre) {
+
+                    pacienteNombre.textContent =
+                        `ID ${pacienteId}`;
+
+                }
+
+            }
 
 
-                verAsignaciones();
+            if (respuestaPersonal.ok) {
+
+                if (personalNombre) {
+
+                    personalNombre.textContent =
+                        `${personal.nombre || ""} ` +
+                        `${personal.apellido_paterno || ""} ` +
+                        `${personal.apellido_materno || ""}`.trim();
+
+                }
+
+            } else {
+
+                if (personalNombre) {
+
+                    personalNombre.textContent =
+                        `ID ${personalId}`;
+
+                }
+
+            }
 
 
-            } catch (error) {
+        } catch (error) {
 
-                console.error(error);
+            console.error(error);
 
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
+
+            if (pacienteNombre) {
+
+                pacienteNombre.textContent =
+                    `ID ${pacienteId}`;
+
+            }
+
+
+            if (personalNombre) {
+
+                personalNombre.textContent =
+                    `ID ${personalId}`;
 
             }
 
         }
 
+    }
 
-        // ==========================================
-        // ELIMINAR ASIGNACIÓN
-        // ==========================================
 
-        async function eliminarAsignacion(id) {
+    function cerrarDetallesAsignacion() {
 
-            const confirmar = confirm(
-                "¿Estás seguro de que deseas eliminar esta asignación?"
+        const detalle =
+            document.getElementById(
+                "detallesAsignacion"
             );
 
 
-            if (!confirmar) {
+        if (!detalle) return;
+
+
+        detalle.style.display = "none";
+
+    }
+
+
+    async function eliminarAsignacion(id) {
+
+        if (!confirm(
+            "¿Deseas eliminar esta asignación?"
+        )) return;
+
+
+        try {
+
+            const respuesta = await fetch(
+
+                `${API}/asignaciones/${id}`,
+
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${obtenerToken()}`
+
+                    }
+
+                }
+
+            );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok) {
+
+                alert(
+                    resultado.detail ||
+                    "No se pudo eliminar la asignación."
+                );
 
                 return;
 
             }
 
 
-            try {
-
-                const respuesta = await fetch(
-                    API + "/asignaciones/" + id,
-                    {
-                        method: "DELETE",
-                        headers: encabezados()
-                    }
-                );
-
-
-                const datos =
-                    await respuesta.json();
-
-
-                if (!respuesta.ok) {
-
-                    alert(
-                        datos.detail ||
-                        "No se pudo eliminar la asignación."
-                    );
-
-                    return;
-
-                }
-
-
-                alert(
-                    "Asignación eliminada correctamente."
-                );
-
-
-                verAsignaciones();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "No se pudo conectar con el servidor."
-                );
-
-            }
-
-        }
-
-
-        // ==========================================
-        // CERRAR SESIÓN
-        // ==========================================
-
-        function cerrarSesion() {
-
-            const confirmar = confirm(
-                "¿Estás seguro de que deseas cerrar sesión?"
+            alert(
+                "Asignación eliminada correctamente."
             );
 
 
-            if (confirmar) {
+            verAsignaciones();
 
-                localStorage.clear();
 
-                window.location.href = "/";
+        } catch (error) {
 
-            }
+            console.error(error);
+
+            alert(
+                "No se pudo conectar con el servidor."
+            );
 
         }
 
-    </script>
+    }
+
+
+    /* ==================================================
+       INICIO
+    ================================================== */
+
+    function inicioAdmin() {
+
+        const fechaMinima =
+            obtenerFechaMinima();
+
+        const fechaMaxima =
+            obtenerFechaActual();
+
+        console.log(
+            "Rango permitido de fechas:",
+            fechaMinima,
+            "hasta",
+            fechaMaxima
+        );
+
+    }
+
+
+    inicioAdmin();
+
+</script>
 
 </body>
 
