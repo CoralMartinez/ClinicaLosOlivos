@@ -13,7 +13,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
         // Enviar datos a FastAPI
         const respuesta = await fetch(
-            "http://192.168.0.252:8000/usuarios/login",
+            "http://192.168.0.251:8000/usuarios/login",
             {
                 method: "POST",
 

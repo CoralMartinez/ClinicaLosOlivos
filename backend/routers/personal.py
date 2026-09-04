@@ -32,15 +32,11 @@ def get_db():
 # ADMIN, DOCTOR Y ENFERMERO
 # ==========================================
 
+
+
 @router.get("/", response_model=list[PersonalResponse])
-def obtener_personal(
-    db: Session = Depends(get_db),
-    usuario_actual=Depends(get_current_user)
-):
-
-    personal = db.query(Personal).all()
-
-    return personal
+def obtener_personal(db: Session = Depends(get_db)):
+    return db.query(Personal).order_by(Personal.id.asc()).all()
 
 
 # ==========================================
